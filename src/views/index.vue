@@ -12,34 +12,10 @@
     <el-carousel-item v-for="(item, index) in 4" :key="item">
       <!-- <h3 text="2xl" justify="center">{{ item }}</h3>
        -->
-      <img
-        v-if="index == 0"
-        style="width: 100%"
-        src="https://bing.img.run/uhd.php"
-        alt=""
-        srcset=""
-      />
-      <img
-        v-if="index == 2"
-        style="width: 100%"
-        src="https://api.dujin.org/pic/ghibli/qyqx"
-        alt=""
-        srcset=""
-      />
-      <img
-        v-if="index == 1"
-        style="width: 100%"
-        src="https://bing.img.run/rand_uhd.php"
-        alt=""
-        srcset=""
-      />
-      <img
-        v-if="index == 3"
-        style="width: 100%"
-        src="https://api.dujin.org/pic/ghibli"
-        alt=""
-        srcset=""
-      />
+      <img v-if="index == 0" style="width: 100%" src="https://bing.img.run/uhd.php" alt="" srcset="" />
+      <img v-if="index == 2" style="width: 100%" src="https://api.dujin.org/pic/ghibli/qyqx" alt="" srcset="" />
+      <img v-if="index == 1" style="width: 100%" src="https://bing.img.run/rand_uhd.php" alt="" srcset="" />
+      <img v-if="index == 3" style="width: 100%" src="https://api.dujin.org/pic/ghibli" alt="" srcset="" />
     </el-carousel-item>
   </el-carousel>
 
@@ -47,8 +23,10 @@
   <div class="test">
     <p>git冲突测试仓库端</p>
     <p>知道okok</p>
-<p>12138</p>
-    </div>
+    <p>12138</p>
+    <p>知道了会用了 我就说吧</p>
+    <p>测试</p>
+  </div>
 
   <div class="header">这是固定的标题</div>
   <div class="container">
@@ -118,6 +96,7 @@ body {
   background-size: cover;
   background-attachment: fixed;
 }
+
 .testP {
   background-color: gray;
   line-height: 72px;
