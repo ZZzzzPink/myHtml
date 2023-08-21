@@ -63,7 +63,6 @@
 
   <div class="header">这是固定的标题</div>
   <div class="container">
-    <p>git冲突测试</p>
     <p>2</p>
     <p>2</p>
     <p>2</p>
