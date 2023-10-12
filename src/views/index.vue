@@ -7,15 +7,43 @@
   <p>vue3</p>
   <p>{{ num }}</p>
   <p>{{ com }}</p>
-
+  <img
+    src="https://cos.vmaxcloud.com.cn/upload/common/images/20230915/20230915105236169474635665646_small.gif"
+    alt=""
+  />
+  <img src="@/assets/images/秒杀.gif" alt="" />
   <el-carousel :interval="4000" type="card" height="400px">
     <el-carousel-item v-for="(item, index) in 4" :key="item">
       <!-- <h3 text="2xl" justify="center">{{ item }}</h3>
        -->
-      <img v-if="index == 0" style="width: 100%" src="https://bing.img.run/uhd.php" alt="" srcset="" />
-      <img v-if="index == 2" style="width: 100%" src="https://api.dujin.org/pic/ghibli/qyqx" alt="" srcset="" />
-      <img v-if="index == 1" style="width: 100%" src="https://bing.img.run/rand_uhd.php" alt="" srcset="" />
-      <img v-if="index == 3" style="width: 100%" src="https://api.dujin.org/pic/ghibli" alt="" srcset="" />
+      <img
+        v-if="index == 0"
+        style="width: 100%"
+        src="https://bing.img.run/uhd.php"
+        alt=""
+        srcset=""
+      />
+      <img
+        v-if="index == 2"
+        style="width: 100%"
+        src="https://api.dujin.org/pic/ghibli/qyqx"
+        alt=""
+        srcset=""
+      />
+      <img
+        v-if="index == 1"
+        style="width: 100%"
+        src="https://bing.img.run/rand_uhd.php"
+        alt=""
+        srcset=""
+      />
+      <img
+        v-if="index == 3"
+        style="width: 100%"
+        src="https://api.dujin.org/pic/ghibli"
+        alt=""
+        srcset=""
+      />
     </el-carousel-item>
   </el-carousel>
 
@@ -45,7 +73,6 @@
     <p>2</p>
   </div>
 </template>
-
 
 <script setup>
 import { onMounted, ref } from "vue";
@@ -129,6 +156,3 @@ body {
   background-color: #d3dce6;
 }
 </style>
-
-
-
