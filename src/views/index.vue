@@ -45,6 +45,8 @@
 
   <div class="testP">粘性布局测试</div>
   <div class="test">
+    <p>test</p>
+    <p>2</p>
     <p>1</p>
     <p>1</p>
     <p>1</p>
@@ -56,9 +58,7 @@
     <p>1</p>
     <p>1</p>
     <p>1</p>
-    <p>1</p>
-    <p>1</p>
-    <p>1</p>
+    <p>2</p>
     <p>1</p>
     <p>1</p>
     <p>1</p>
