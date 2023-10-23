@@ -2,7 +2,7 @@
   <a-button type="dashed">aaa</a-button>
   <el-button type="info">ddd</el-button>
   <button @click="rout">编程式路由 query</button>
-  <button @click="routP">编程式路由 params</button>
+  <button  @click="routP">编程式路由 params</button>
   <RouterLink style="text-decoration: none" to="/n">点击跳转</RouterLink>
   <p>vue3</p>
   <p>{{ num }}</p>
@@ -11,7 +11,7 @@
   <el-carousel :interval="4000" type="card" height="400px">
     <el-carousel-item v-for="(item, index) in 4" :key="item">
       <!-- <h3 text="2xl" justify="center">{{ item }}</h3>
-       -->
+      -->
       <img
         v-if="index == 0"
         style="width: 100%"
@@ -68,7 +68,7 @@
   </div>
 
   <div class="header">这是固定的标题</div>
-  <div class="container">
+  <div  class="container">
     <p>2</p>
     <p>2</p>
     <p>2</p>
@@ -100,7 +100,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { onMounted, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
@@ -112,7 +111,6 @@ let { num, com } = storeToRefs(PiniaTest());
 
 let router = useRouter();
 let imageUrl = ref("");
-
 onMounted(async () => {
   imageUrl.value = await image();
   console.log(com.value);
@@ -182,6 +180,3 @@ body {
   background-color: #d3dce6;
 }
 </style>
-
-
-
