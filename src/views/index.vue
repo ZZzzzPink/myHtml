@@ -7,7 +7,7 @@
   <el-button type="info">ddd</el-button>
   <button @click="rout">编程式路由 query</button>
   <button @click="routP">编程式路由 params</button>
-  <button @click="routT" >跳转测试</button>
+  <button @click="routT">跳转测试</button>
   <RouterLink style="text-decoration: none" to="/n">点击跳转</RouterLink>
   <p>vue3</p>
   <p>{{ num }}</p>
