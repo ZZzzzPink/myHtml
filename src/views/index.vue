@@ -182,6 +182,7 @@ onMounted(async () => {
 });
 
 let rout = () => {
+  // 路径
   router.push({ path: "/r", query: { a: 2 } });
 };
 
@@ -190,6 +191,7 @@ let routT = () => {
 };
 
 let routP = () => {
+  // 名称
   router.push({ name: "rou", params: { text: "name传参" } });
 };
 
