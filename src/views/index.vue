@@ -1,45 +1,29 @@
 <template>
+  <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
+    style="width: 240px" :props="{ value: 'label', label: 'label' }" node-key="value" @node-click="cli()" />
+  <el-button type="success" @click="down">下载</el-button>
+
   <a-button type="dashed">aaa</a-button>
   <el-button type="info">ddd</el-button>
   <button @click="rout">编程式路由 query</button>
-  <button  @click="routP">编程式路由 params</button>
+  <button @click="routP">编程式路由 params</button>
+  <button @click="routT" >跳转测试</button>
   <RouterLink style="text-decoration: none" to="/n">点击跳转</RouterLink>
   <p>vue3</p>
   <p>{{ num }}</p>
   <p>{{ com }}</p>
 
+  <van-calendar title="日历" :poppable="false" :show-confirm="false" :lazy-render="false"
+    :style="{ width: '100vw', height: '100vh' }" />
+
   <el-carousel :interval="4000" type="card" height="400px">
     <el-carousel-item v-for="(item, index) in 4" :key="item">
       <!-- <h3 text="2xl" justify="center">{{ item }}</h3>
       -->
-      <img
-        v-if="index == 0"
-        style="width: 100%"
-        src="https://bing.img.run/uhd.php"
-        alt=""
-        srcset=""
-      />
-      <img
-        v-if="index == 2"
-        style="width: 100%"
-        src="https://api.dujin.org/pic/ghibli/qyqx"
-        alt=""
-        srcset=""
-      />
-      <img
-        v-if="index == 1"
-        style="width: 100%"
-        src="https://bing.img.run/rand_uhd.php"
-        alt=""
-        srcset=""
-      />
-      <img
-        v-if="index == 3"
-        style="width: 100%"
-        src="https://api.dujin.org/pic/ghibli"
-        alt=""
-        srcset=""
-      />
+      <img v-if="index == 0" style="width: 100%" src="https://bing.img.run/uhd.php" alt="" srcset="" />
+      <img v-if="index == 2" style="width: 100%" src="https://api.dujin.org/pic/ghibli/qyqx" alt="" srcset="" />
+      <img v-if="index == 1" style="width: 100%" src="https://bing.img.run/rand_uhd.php" alt="" srcset="" />
+      <img v-if="index == 3" style="width: 100%" src="https://api.dujin.org/pic/ghibli" alt="" srcset="" />
     </el-carousel-item>
   </el-carousel>
 
@@ -68,7 +52,7 @@
   </div>
 
   <div class="header">这是固定的标题</div>
-  <div  class="container">
+  <div class="container">
     <p>2</p>
     <p>2</p>
     <p>2</p>
@@ -101,7 +85,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, defineComponent, reactive, toRefs, watch, ref } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { image } from "../api/api/image.js";
 import { PiniaTest } from "../stores/PiniaTest";
@@ -109,19 +93,120 @@ import { storeToRefs } from "pinia";
 
 let { num, com } = storeToRefs(PiniaTest());
 
+const value = ref(null);
+
+const data = reactive([
+  {
+    value: "1",
+    label: "Level one 1",
+    children: [
+      {
+        value: "1-1",
+        label: "Level two 1-1",
+        children: [
+          {
+            value: "1-1-1",
+            label: "Level three 1-1-1",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: "2",
+    label: "Level one 2",
+    children: [
+      {
+        value: "2-1",
+        label: "Level two 2-1",
+        children: [
+          {
+            value: "2-1-1",
+            label: "Level three 2-1-1",
+          },
+        ],
+      },
+      {
+        value: "2-2",
+        label: "Level two 2-2",
+        children: [
+          {
+            value: "2-2-1",
+            label: "Level three 2-2-1",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: "3",
+    label: "Level one 3",
+    children: [
+      {
+        value: "3-1",
+        label: "Level two 3-1",
+        children: [
+          {
+            value: "3-1-1",
+            label: "Level three 3-1-1",
+          },
+        ],
+      },
+      {
+        value: "3-2",
+        label: "Level two 3-2",
+        children: [
+          {
+            value: "3-2-1",
+            label: "Level three 3-2-1",
+          },
+        ],
+      },
+    ],
+  },
+]);
+let elTree = ref();
+
+let cli = () => {
+  setTimeout(() => {
+    let data = elTree.value.getCurrentKey();
+    console.log("name==>", value.value, "id==>", data);
+  }, 100);
+};
+
 let router = useRouter();
 let imageUrl = ref("");
 onMounted(async () => {
-  imageUrl.value = await image();
-  console.log(com.value);
+  // imageUrl.value = await image();
+  // console.log(com.value);
 });
 
 let rout = () => {
   router.push({ path: "/r", query: { a: 2 } });
 };
 
+let routT = () => {
+  router.push({ path: "/t" });
+};
+
 let routP = () => {
   router.push({ name: "rou", params: { text: "name传参" } });
+};
+
+
+let down = () => {
+  console.log('[ 333 ] >', 333)
+
+    const a = document.createElement("a");
+    a.style.display = 'none'
+    // const url = window.URL.create0bjectURL('https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip');
+    a.href = 'https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip';
+    a.download =  '测试223.zip';
+    // document.body.appendchild(a)
+    a.click();
+    //监听下载完成事件
+    // window.URL.revokeobjectURL(url)
+    // document.body.removechild(a)
 };
 </script>
 
@@ -131,6 +216,7 @@ body {
   background-size: cover;
   background-attachment: fixed;
 }
+
 .testP {
   background-color: gray;
   line-height: 72px;

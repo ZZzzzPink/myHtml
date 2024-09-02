@@ -17,6 +17,11 @@ const router = createRouter({
       path: '/r',
       name: 'rou',
       component: ()=>import('../components/RouterCom.vue')
+    },
+    {
+      path: '/t',
+      name: 'test',
+      component: ()=>import('../components/test.vue')
     }
   ]
 })
