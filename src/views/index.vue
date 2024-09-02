@@ -183,7 +183,7 @@ onMounted(async () => {
 
 let rout = () => {
   // 路径
-  router.push({ path: "/r", query: { a: 2 } });
+  router.push({ path: "/r", query: { a: 2 } ,params:{text:'这是路径跳转的参数'}});
 };
 
 let routT = () => {
