@@ -1,6 +1,6 @@
 // import './assets/main.css'
-// main.ts
 import 'virtual:uno.css'
+import "video.js/dist/video-js.css";
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 

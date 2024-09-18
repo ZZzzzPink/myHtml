@@ -8,6 +8,10 @@
     </ul>
     <button @click="remove">删除</button>
 
+    <video class="video-js" id="playerId">
+        <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" />
+    </video>
+
     <el-tree-select
         ref="elTree"
         v-model="value"
@@ -136,7 +140,7 @@ import { RouterLink, useRouter } from "vue-router"
 import { image } from "../api/api/image.js"
 import { PiniaTest } from "../stores/PiniaTest"
 import { storeToRefs } from "pinia"
-
+import videojs from "video.js"
 let { num, com } = storeToRefs(PiniaTest())
 
 const value = ref(null)
@@ -242,6 +246,26 @@ let imageUrl = ref("")
 onMounted(async () => {
     // imageUrl.value = await image();
     // console.log(com.value);
+    let option = {
+        autoplay: true,
+        controls: true,
+        preload: "auto", // 预加载
+        autoplay: true, // 是否自动播放
+        fluid: false, // 自适应宽高
+        height: 200,
+        width: 300,
+    }
+    const player = videojs("playerId", option)
+    // player.src("https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4")
+    player.on("ended", () => {
+        //播放完成
+        console.log(2)
+    })
+    player.on("play",(e)=>{
+        console.log(3,e);
+        
+    })
+
     let index = 1
     setInterval(() => {
         localStorage.setItem("index", (index += 1))
