@@ -262,7 +262,10 @@ let routP = () => {
     // 名称
     router.push({ name: "rou", params: { text: "name传参" } })
 }
-
+/**
+ * @description: 手动创建下载文件
+ * @return {*}
+ */
 let down = () => {
     console.log("[ 333 ] >", 333)
 
