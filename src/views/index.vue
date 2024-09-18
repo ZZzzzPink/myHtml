@@ -9,7 +9,7 @@
     <button @click="remove">删除</button>
 
     <video class="video-js" id="playerId">
-        <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" />
+        <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4"  />
     </video>
 
     <el-tree-select
