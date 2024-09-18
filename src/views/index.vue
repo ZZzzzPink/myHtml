@@ -222,7 +222,10 @@ let remove = () => {
     //注意这里是shift
     lists.shift()
 }
-
+/**
+ * @description: 获取组件的值
+ * @return {*}
+ */
 let cli = () => {
     // 延迟100毫秒执行以下操作，以确保DOM操作或异步操作的完成
     setTimeout(() => {
