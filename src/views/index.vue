@@ -1,4 +1,5 @@
 <template>
+    <div class="c-#65a30d">unoCss使用</div>
     <ul>
         <li v-for="(item, index) in lists">
             <input type="checkbox" :value="item.text" />
