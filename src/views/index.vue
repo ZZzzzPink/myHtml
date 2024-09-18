@@ -1,5 +1,5 @@
 <template>
-    <div class="c-#65a30d">unoCSS使用</div>
+    <div class="c-#65a30d">unoCSS的初次使用</div>
     <ul>
         <li v-for="(item, index) in lists">
             <input type="checkbox" :value="item.text" />
