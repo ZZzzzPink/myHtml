@@ -15,9 +15,11 @@ export default defineConfig({
         port: 8080,
         open: true,
     },
-    publicPath: './',
-    outputDir: 'dist',
-    assetsDir: 'assets',
-    base: '/onlineProject/',
-  
+    publicPath: "./",
+    outputDir: "dist",
+    assetsDir: "assets",
+    base: "/onlineProject/",
+    build: {
+        outDir: "docs",
+    },
 })
