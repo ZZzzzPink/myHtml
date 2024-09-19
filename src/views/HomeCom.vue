@@ -52,7 +52,7 @@ let getYiYan = async () => {
             align-items: center;
 
             .text {
-                background: linear-gradient(to right, #00ff00, #00f2ff, #007bff);
+                background: linear-gradient(to right, #ffffff, #7e7e7e, #000000);
                 /*设置渐变的方向从左到右 颜色从ff0000到ffff00*/
                 -webkit-background-clip: text;
                 /*将设置的背景颜色限制在文字中*/
