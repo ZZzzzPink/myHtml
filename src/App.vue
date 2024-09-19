@@ -19,10 +19,10 @@ let daysDistance = () => {
     let dayTime2 = 60 * 60 * 1000
     if (ms > dayTime) {
         var days = Math.floor(ms / (24 * 3600 * 1000))
-        console.log(`网站已运行${days}天`)
+        console.log(`网站已运行${days}天2`)
     } else {
         let Rday = Math.floor(ms / dayTime2)
-        console.log(`网站已运行${Rday}个小时`)
+        console.log(`网站已运行${Rday}个小时2`)
     }
 }
 
