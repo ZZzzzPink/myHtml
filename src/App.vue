@@ -1,8 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router"
 import { onMounted, ref, reactive } from "vue"
-import { RandomWord } from "./api/ComponentsApi/Aword"
-let OneWord = ref("")
 
 //运行时间
 let daysDistance = () => {
@@ -21,17 +19,11 @@ let daysDistance = () => {
     let dayTime2 = 60 * 60 * 1000
     if (ms > dayTime) {
         var days = Math.floor(ms / (24 * 3600 * 1000))
-        console.log(`网站已运行${days}天`, "font-size:12px;color:orange;line-height: 25px;")
+        console.log(`网站已运行${days}天`)
     } else {
         let Rday = Math.floor(ms / dayTime2)
-        console.log(`网站已运行${Rday}个小时`, "font-size:12px;color:orange;line-height: 25px;")
+        console.log(`网站已运行${Rday}个小时`)
     }
-}
-
-//一言
-let getOneWord = async () => {
-    let res = await RandomWord()
-    OneWord.value = res.hitokoto
 }
 
 onMounted(() => {
@@ -45,22 +37,10 @@ onMounted(() => {
 
 <template>
     <RouterView />
-    <span class="OneWord">{{ OneWord }}</span>
 </template>
 
 <style>
-
 body {
-    font-family: PingFangSC-Regular;
-}
-
-.OneWord {
-    position: fixed;
-    bottom: 0px;
-    left: 50%;
-    font-size: 13px;
-    transform: translateX(-50%);
-    color: white;
-    user-select: none;
+    font-family: PingFangSC-Medium !important;
 }
 </style>
