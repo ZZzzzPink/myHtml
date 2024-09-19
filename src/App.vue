@@ -30,8 +30,6 @@ onMounted(() => {
     //运行时间
     daysDistance()
 
-    //一言
-    getOneWord()
 })
 </script>
 
