@@ -16,11 +16,8 @@ export default defineConfig({
         open: true,
     },
     publicPath: './',
-    outputDir: 'docs',
+    outputDir: 'dist',
     assetsDir: 'assets',
     base: '/onlineProject/',
-    build: {
-      outDir: "docs"
-    },
   
 })
