@@ -1,0 +1,24 @@
+body {
+  min-height: 100vh;
+  /* color: var(--color-text); */
+  background: url('https://ts1.cn.mm.bing.net/th/id/R-C.60ee10a8c6c087d3bc0e9591c3e27142?rik=TcTzFrt0W1%2bv7Q&riu=http%3a%2f%2fwww.sogoupc.com%2fuploads%2fallimg%2f120308%2f1-12030Q13328.jpg&ehk=IErl2vZ0iyJNpotRfd9Vyl8S6W8zZOHp4FMLEa53XvQ%3d&risl=&pid=ImgRaw&r=0') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.video_q {
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  z-index: -1;
+  object-fit: fill;
+}
+
+
+

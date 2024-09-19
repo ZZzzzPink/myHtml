@@ -36,6 +36,7 @@ instance.interceptors.response.use(function (response) {
   toast.close()
   return response.data
 }, function (error) {
+  toast.close()
   return Promise.reject(error)
 })
 
