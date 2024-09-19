@@ -16,10 +16,11 @@ export default defineConfig({
         open: true,
     },
     publicPath: './',
-    outputDir: 'dist',
+    outputDir: 'docs',
     assetsDir: 'assets',
-    
-  
-    //访问路径
     base: '/onlineProject/',
+    build: {
+      outDir: "docs"
+    },
+  
 })
