@@ -39,6 +39,6 @@ onMounted(() => {
 
 <style>
 body {
-    font-family: PingFangSC-Medium !important;
+    font-family: PingFangSC-Regular !important;
 }
 </style>

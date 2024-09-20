@@ -58,7 +58,7 @@ let getYiYan = async () => {
                 /*将设置的背景颜色限制在文字中*/
                 -webkit-text-fill-color: transparent;
                 /*给文字设置成透明*/
-                animation: ani 10s infinite ease-in-out;
+                animation: ani 15s infinite ease-in-out;
             }
 
             @keyframes ani {
