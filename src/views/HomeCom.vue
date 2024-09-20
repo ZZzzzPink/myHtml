@@ -81,8 +81,7 @@ let getYiYan = async () => {
             .text {
                 font-size: 2em;
                 color: white;
-                text-shadow: 0 0 10px red, 0 0 20px rgb(255, 98, 0), 0 0 30px yellow, 0 0 40px green,
-                    0 0 50px blue, 0 0 60px indigo, 0 0 70px violet;
+                text-shadow: 0 0 30px yellow, 0 0 40px green, 0 0 60px indigo, 0 0 70px violet;
 
                 // background: linear-gradient(to right, #ffffff, #393939, #ffffff);
                 // /*设置渐变的方向从左到右 颜色从ff0000到ffff00*/
