@@ -1,10 +1,22 @@
 <template>
-    <div class="headerBox">
+    <div
+        class="headerBox"
+        v-wave="{
+            color: 'rgba(255,255,255,0.1)',
+            initialOpacity: 0.5,
+            duration: 2,
+            easing: 'ease-in',
+        }"
+    >
         <div class="flex_box">
             <div class="logoBox">
-                <div class="text">
-                    {{ oneWord == "" ? "Hi hello !!" : oneWord }}
-                </div>
+                <KinesisContainer>
+                    <div class="text">
+                        <KinesisElement>
+                            {{ oneWord == "" ? "Hi hello !!" : oneWord }}
+                        </KinesisElement>
+                    </div>
+                </KinesisContainer>
             </div>
         </div>
     </div>
@@ -13,14 +25,17 @@
 <script setup>
 import { onMounted, reactive, ref } from "vue"
 import { RandomWord } from "../api/ComponentsApi/Aword"
+import { KinesisContainer, KinesisElement, KinesisAudio } from "vue-kinesis"
+
 let oneWord = ref("")
+
 onMounted(function () {
     getYiYan()
 })
 
 let getYiYan = async () => {
     let res = await RandomWord()
-    oneWord.value = res.hitokoto +'  ---'+ res.from
+    oneWord.value = res.hitokoto + "  ---" + res.from
 }
 </script>
 
@@ -65,13 +80,17 @@ let getYiYan = async () => {
             line-height: 1;
             .text {
                 font-size: 2em;
-                background: linear-gradient(to right, #ffffff, #393939, #ffffff);
-                /*设置渐变的方向从左到右 颜色从ff0000到ffff00*/
-                -webkit-background-clip: text;
-                /*将设置的背景颜色限制在文字中*/
-                -webkit-text-fill-color: transparent;
-                /*给文字设置成透明*/
-                animation: ani 10s infinite ease-in-out;
+                color: white;
+                text-shadow: 0 0 10px red, 0 0 20px rgb(255, 98, 0), 0 0 30px yellow, 0 0 40px green,
+                    0 0 50px blue, 0 0 60px indigo, 0 0 70px violet;
+
+                // background: linear-gradient(to right, #ffffff, #393939, #ffffff);
+                // /*设置渐变的方向从左到右 颜色从ff0000到ffff00*/
+                // -webkit-background-clip: text;
+                // /*将设置的背景颜色限制在文字中*/
+                // -webkit-text-fill-color: transparent;
+                // /*给文字设置成透明*/
+                // animation: ani 10s infinite ease-in-out;
             }
 
             @keyframes ani {
