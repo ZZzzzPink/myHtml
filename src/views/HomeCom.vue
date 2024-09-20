@@ -3,7 +3,7 @@
         <div class="flex_box">
             <div class="logoBox">
                 <div class="text">
-                    <h1>{{ oneWord == "" ? "Hi hello !!" : oneWord }}</h1>
+                    {{ oneWord == "" ? "Hi hello !!" : oneWord }}
                 </div>
             </div>
         </div>
@@ -20,18 +20,30 @@ onMounted(function () {
 
 let getYiYan = async () => {
     let res = await RandomWord()
-    oneWord.value = res.hitokoto
+    oneWord.value = res.hitokoto +'  ---'+ res.from
 }
 </script>
 
 <style lang="scss" scoped>
+:root {
+    image-rendering: -webkit-optimize-contrast;
+}
+@media (max-width: 768px) {
+    .headerBox {
+        background-image: url("https://t.mwm.moe/mp") !important;
+    }
+}
+
 .headerBox {
     height: 100%;
+    overflow: hidden;
     // padding-bottom: 5px;
     box-sizing: border-box;
     // background-image: url("https://api.dujin.org/pic/ghibli/qyqx");
-    background-image: url("https://imgapi.xl0408.top/index.php");
-    // background-image: url('https://t.mwm.moe/fj');
+    // background-image: url("https://imgapi.xl0408.top/index.php");
+    background-image: url("https://t.mwm.moe/fj");
+    // background-image: url('http://www.98qy.com/sjbz/api.php');
+    // background-image: url('https://t.mwm.moe/mp');
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -50,36 +62,27 @@ let getYiYan = async () => {
         .logoBox {
             display: flex;
             align-items: center;
-
+            line-height: 1;
             .text {
-                background: linear-gradient(to right, #ffffff, #7e7e7e, #000000);
+                font-size: 2em;
+                background: linear-gradient(to right, #ffffff, #393939, #ffffff);
                 /*设置渐变的方向从左到右 颜色从ff0000到ffff00*/
                 -webkit-background-clip: text;
                 /*将设置的背景颜色限制在文字中*/
                 -webkit-text-fill-color: transparent;
                 /*给文字设置成透明*/
-                animation: ani 15s infinite ease-in-out;
+                animation: ani 10s infinite ease-in-out;
             }
 
             @keyframes ani {
                 0% {
-                    background-position: 250px 200px;
+                    background-position: 0px 200px;
                 }
 
                 100% {
                     background-position: 850px 400px;
                 }
             }
-
-            .logo {
-                background-color: yellow;
-                background: inherit;
-            }
-        }
-
-        .videoPlay {
-            width: 600px;
-            height: 600px;
         }
     }
 }
