@@ -56,7 +56,7 @@ let getYiYan = async () => {
     box-sizing: border-box;
     // background-image: url("https://api.dujin.org/pic/ghibli/qyqx");
     // background-image: url("https://imgapi.xl0408.top/index.php");
-    background-image: url("https://t.mwm.moe/fj");
+    //   background-image: url("https://t.mwm.moe/fj");
     // background-image: url('http://www.98qy.com/sjbz/api.php');
     // background-image: url('https://t.mwm.moe/mp');
     background-attachment: fixed;
