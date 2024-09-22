@@ -45,7 +45,7 @@ let getYiYan = async () => {
 }
 @media (max-width: 768px) {
     .headerBox {
-        background-image: url("https://t.mwm.moe/mp") !important;
+        // background-image: url("https://t.mwm.moe/mp") !important; //移动端背景
     }
 }
 
@@ -54,9 +54,9 @@ let getYiYan = async () => {
     overflow: hidden;
     // padding-bottom: 5px;
     box-sizing: border-box;
+    // background-image: url("https://t.mwm.moe/fj"); // PC背景
     // background-image: url("https://api.dujin.org/pic/ghibli/qyqx");
     // background-image: url("https://imgapi.xl0408.top/index.php");
-    //   background-image: url("https://t.mwm.moe/fj");
     // background-image: url('http://www.98qy.com/sjbz/api.php');
     // background-image: url('https://t.mwm.moe/mp');
     background-attachment: fixed;
