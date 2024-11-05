@@ -1,4 +1,5 @@
 <template>
+    <comPone ref="defineExposeTest" title="传值"></comPone>
     <div class="c-#0284c7">unoCSS使用</div>
     <ul>
         <li v-for="(item, index) in lists">
@@ -7,9 +8,8 @@
         </li>
     </ul>
     <button @click="remove">删除</button>
-
     <video class="video-js" id="playerId">
-        <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4"  />
+        <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" />
     </video>
 
     <el-tree-select
@@ -135,13 +135,43 @@
 </template>
 
 <script setup>
-import { onMounted, defineComponent, reactive, toRefs, watch, ref, onBeforeUnmount } from "vue"
+import {
+    onMounted,
+    defineComponent,
+    reactive,
+    toRefs,
+    watch,
+    ref,
+    onBeforeUnmount,
+    getCurrentInstance,
+} from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { image } from "../api/api/image.js"
 import { PiniaTest } from "../stores/PiniaTest"
 import { storeToRefs } from "pinia"
 import videojs from "video.js"
+import comPone from "../components/defineExpose.vue"
 let { num, com } = storeToRefs(PiniaTest())
+
+let test = getCurrentInstance().appContext.config.globalProperties
+
+let defineExposeTest = ref()
+
+function title() {
+    if (defineExposeTest.value) {
+        console.log("Current count:", defineExposeTest.value.count)
+        console.log("Count after increment:", defineExposeTest.value.count)
+    }
+}
+
+console.log(
+    "%c [ test ]-147",
+    "font-size:13px; background:pink; color:#bf2c9f;",
+    test.$test({
+        url: "https://api.paugram.com/wallpaper/",
+        method: "get",
+    })
+)
 
 const value = ref(null)
 let lists = reactive([
@@ -244,13 +274,13 @@ let router = useRouter()
 let imageUrl = ref("")
 
 onMounted(async () => {
+    title()
     // imageUrl.value = await image();
     // console.log(com.value);
     let option = {
-        autoplay: true,
         controls: true,
         preload: "auto", // 预加载
-        autoplay: true, // 是否自动播放
+        autoplay: false, // 是否自动播放
         fluid: false, // 自适应宽高
         height: 200,
         width: 300,
@@ -261,16 +291,42 @@ onMounted(async () => {
         //播放完成
         console.log(2)
     })
-    player.on("play",(e)=>{
-        console.log(3,e);
-        
+    player.on("play", (e) => {
+        console.log(3, e)
     })
 
     let index = 1
     setInterval(() => {
         localStorage.setItem("index", (index += 1))
     }, 1000)
+
+    console.log(
+        "%c [ getData() ]-292",
+        "font-size:13px; background:pink; color:#bf2c9f;",
+        getData()
+    )
 })
+/**
+ * @description: 全局挂载request测试
+ * @return {*}
+ */
+let getData = async () => {
+    test.$test({
+        // url: "https://api.paugram.com/wallpaper/",
+        url: "https://v1.hitokoto.cn/",
+        method: "get",
+    })
+        .then((res) => {
+            console.log(
+                "%c [ res ]-308",
+                "font-size:13px; background:pink; color:#bf2c9f;",
+                res.hitokoto + "---" + res.from
+            )
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+}
 
 onBeforeUnmount(() => {
     console.log("[ unmount ] >", "unmount")
@@ -294,9 +350,8 @@ let routP = () => {
  * @return {*}
  */
 let down = () => {
-    console.log("[ 333 ] >", 333)
-
     const a = document.createElement("a")
+
     a.style.display = "none"
     // const url = window.URL.create0bjectURL('https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip');
     a.href = "https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip"

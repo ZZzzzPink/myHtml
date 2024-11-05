@@ -5,6 +5,7 @@ import vue from "@vitejs/plugin-vue"
 
 // https://vitejs.dev/config/
 export default defineConfig({
+
     plugins: [vue(), UnoCSS()],
     resolve: {
         alias: {
@@ -14,7 +15,8 @@ export default defineConfig({
     server: {
         open: true,
         port: 5173,
-        host: "0.0.0.0",
-        public: "192.168.2.1:5173",
     },
+    publicPath: "./",
+    assetsDir: "assets",
+    base: "./",
 })
