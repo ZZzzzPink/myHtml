@@ -13,6 +13,7 @@ import NumberFlapper from './components/NumberFlapper.vue';
 header {
   line-height: 1.5;
   max-height: 100vh;
+  overflow-x: hidden;
 }
 
 .logo {

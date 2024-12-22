@@ -14,7 +14,8 @@ export default defineConfig({
     },
     server: {
         open: true,
-        port: 5173,
+        port: 8088,
+        host:true
     },
     publicPath: "./",
     assetsDir: "assets",

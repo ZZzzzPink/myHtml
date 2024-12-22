@@ -23,7 +23,13 @@ const router = createRouter({
       path: '/t',
       name: 'test',
       component: ()=>import('../components/test.vue')
-    }
+    },
+    {
+      path: '/progressBar',
+      name: 'progressBar',
+      component: ()=>import('../views/progressBar.vue')
+    },
+
   ]
 })
 

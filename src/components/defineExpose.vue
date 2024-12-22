@@ -1,12 +1,15 @@
 <template>
+    <slot name="header"></slot>
+    <slot :data="res" name="data"></slot>
     <div>defineExpose测试 {{ title }}</div>
+    <slot></slot>
 </template>
 
 <script setup>
 import { onMounted, reactive, ref, watch } from "vue"
 let count = ref(0)
-
-defineProps({
+let res =reactive(['张三','李四','王五'])
+let porps=defineProps({
     title: {
         type: String,
         default: "2",
@@ -14,7 +17,7 @@ defineProps({
 })
 
 onMounted(() => {
-    console.log('%c [ title ]-18', 'font-size:13px; background:pink; color:#bf2c9f;', title)
+    console.log('%c [ title ]-18', 'font-size:13px; background:pink; color:#bf2c9f;',porps.title)
 })
 
 

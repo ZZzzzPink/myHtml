@@ -1,19 +1,26 @@
+/**
+ * @description: 选项式写法
+ */
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-export let PiniaTest = defineStore('stoerTetx', () => {
-    let num = ref(10)
-
-    let com = computed((res) =>
-        num.value * 2 * res
-    )
-    function test() {
-        this.com(222)
-    }
-
-
-    return {
-        num,
-        com
+export const PiniaTest = defineStore('storeText', {
+    state() {
+        return {
+            com:10,
+            num:20
+        }
+    },
+    getters: {
+        getCom: (state) => state.com,
+        getNum: (state) => state.num,
+    },
+    actions: {
+        setCom(val){
+            this.com = val
+        },
+        setNum(val){
+            this.num = val
+        }
     }
 })

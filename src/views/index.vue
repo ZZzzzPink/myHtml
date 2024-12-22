@@ -1,5 +1,28 @@
 <template>
-    <comPone ref="defineExposeTest" title="传值"></comPone>
+    {{ count }}
+    <block v-if="filesContent !== ''">
+        {{ filesContent }} 
+    </block>
+    <el-button type="primary" size="default" @click="choseFiles">点击选择文件夹</el-button>
+
+    <input type="file" @change="fileChange($event)"></input>
+    <vue-office-docx :src="prvFile" style="height: 500px;" />
+    <!-- @rendered="renderedHandler"
+        @error="errorHandler" -->
+    <iframe v-if="prvFile&& prvFile!==''" style="width: 300px;height: 300px;" :src="prvFile" frameborder="0"></iframe>
+    <comPone ref="defineExposeTest" title="传值">
+            
+            <h4>插槽</h4>
+        <template v-slot:header>
+            <h3 >具名插槽</h3>
+        </template>
+        <template v-slot:data="res" >
+            作用域
+            {{ res.data[0] }}
+        </template>
+    <!-- <h4>插槽</h4> -->
+    </comPone>
+    <RouterLink to="/progressBar">跳转圆形进度条</RouterLink>
     <div class="c-#0284c7">unoCSS使用</div>
     <ul>
         <li v-for="(item, index) in lists">
@@ -12,17 +35,8 @@
         <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" />
     </video>
 
-    <el-tree-select
-        ref="elTree"
-        v-model="value"
-        :data="data"
-        check-strictly
-        :render-after-expand="false"
-        style="width: 240px"
-        :props="{ value: 'label', label: 'label' }"
-        node-key="value"
-        @node-click="cli()"
-    />
+    <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
+        style="width: 240px" :props="{ value: 'label', label: 'label' }" node-key="value" @node-click="cli()" />
     <el-button type="success" @click="down">下载</el-button>
 
     <a-button type="dashed">aaa</a-button>
@@ -35,45 +49,16 @@
     <p>{{ num }}</p>
     <p>{{ com }}</p>
 
-    <van-calendar
-        title="日历"
-        :poppable="false"
-        :show-confirm="false"
-        :lazy-render="false"
-        :style="{ width: '100vw', height: '100vh' }"
-    />
+    <van-calendar title="日历" :poppable="false" :show-confirm="false" :lazy-render="false"
+        :style="{ width: '100vw', height: '100vh' }" />
 
     <el-carousel :interval="4000" type="card" height="400px">
         <el-carousel-item v-for="(item, index) in 4" :key="item">
             <!-- <h3 text="2xl" justify="center">{{ item }}</h3> -->
-            <img
-                v-if="index == 0"
-                style="width: 100%"
-                src="https://bing.img.run/uhd.php"
-                alt=""
-                srcset=""
-            />
-            <img
-                v-if="index == 2"
-                style="width: 100%"
-                src="https://api.dujin.org/pic/ghibli/qyqx"
-                alt=""
-                srcset=""
-            />
-            <img
-                v-if="index == 1"
-                style="width: 100%"
-                src="https://bing.img.run/rand_uhd.php"
-                alt=""
-                srcset=""
-            />
-            <img
-                v-if="index == 3"
-                style="width: 100%"
-                src="https://api.dujin.org/pic/ghibli"
-                alt=""
-                srcset=""
-            />
+            <img v-if="index == 0" style="width: 100%" src="https://bing.img.run/uhd.php" alt="" srcset="" />
+            <img v-if="index == 2" style="width: 100%" src="https://api.dujin.org/pic/ghibli/qyqx" alt="" srcset="" />
+            <img v-if="index == 1" style="width: 100%" src="https://bing.img.run/rand_uhd.php" alt="" srcset="" />
+            <img v-if="index == 3" style="width: 100%" src="https://api.dujin.org/pic/ghibli" alt="" srcset="" />
         </el-carousel-item>
     </el-carousel>
 
@@ -144,19 +129,118 @@ import {
     ref,
     onBeforeUnmount,
     getCurrentInstance,
+    
 } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { image } from "../api/api/image.js"
+// pinia选项式写法
 import { PiniaTest } from "../stores/PiniaTest"
+// pinia组合式写法
+import {useCounterStore} from "../stores/counter.js"
 import { storeToRefs } from "pinia"
 import videojs from "video.js"
 import comPone from "../components/defineExpose.vue"
-let { num, com } = storeToRefs(PiniaTest())
+import { ElMessage } from 'element-plus'
+import VueOfficeDocx from '@vue-office/docx'
+import Vconsole from 'vconsole'
+if (process.env.NODE_ENV == 'development') {
+    let vConsole = new Vconsole()
+}
+let a={name:'张三'}
+let obj={a}
+let obj1={a:{name:'张三'}}
+let obj3={}
+obj3.self='a'
+console.log('%c [ obj ]-135', 'font-size:13px; background:pink; color:#bf2c9f;', obj,obj1,obj3)
+
+console.log('%c [ import.meta.env ]-136', 'font-size:13px; background:pink; color:#bf2c9f;', import.meta.env.VITE_ENV,import.meta.env.VITE_TITLE)
+
+const modules = import.meta.glob("@/views/**/*.vue")
+console.log("%c [ modules ]-157", "font-size:13px; background:pink; color:#bf2c9f;", modules)
+
+// pinia选项式写法
+let Store= PiniaTest()
+console.log('%c [ Store ]-147', 'font-size:13px; background:pink; color:#bf2c9f;', Store.num)
+
+// pinia组合式写法
+let { count,doubleCount }=storeToRefs(useCounterStore())
+let testFn=()=>{
+    let store=useCounterStore()
+    store.increment()
+}
+testFn()
+
+for (var i = 0; i < 5; i++) {
+  setTimeout(function() {
+    console.log(i);
+  }, 1000);
+}
+
+
+
+console.log('%c [ count ]-155', 'font-size:13px; background:pink; color:#bf2c9f;', count.value)
 
 let test = getCurrentInstance().appContext.config.globalProperties
 
 let defineExposeTest = ref()
 
+let prvFile = ref(null)
+let filesContent = ref('')
+let fileChange = (e) => {
+    prvFile.value = false
+    let file = e.target.files[0]
+    console.log('%c [ file ]-148', 'font-size:13px; background:pink; color:#bf2c9f;', file.slice(0,100))
+    let type = file.type
+    console.log('%c [ type ]-135', 'font-size:13px; background:pink; color:#bf2c9f;', type)
+    // type.includes('image')|| type.includes('video')
+
+    let axiosArray = [];
+    let chunkList = [];
+    let chunkSize = file.size / 6;
+    let current = 0;
+    let i = 0;
+    let fileName = new Date().getTime() + "_" + file.name;
+    while (current < 6) {
+        chunkList.push({
+            chunk: file.slice(current * chunkSize, (current + 1) * chunkSize),
+            fileName: current + "_" + fileName
+        });
+        current++;
+    }
+    let conFile=[]
+    chunkList.forEach((item)=>{
+        conFile.push(item.chunk)
+    })
+    const blob = new Blob(conFile, {
+        type
+    })
+    console.log('%c [ blob ]-171', 'font-size:13px; background:pink; color:#bf2c9f;', blob)
+    let blodUrl= window.URL.createObjectURL(blob)
+    setTimeout(()=>{
+        prvFile.value=''
+    },2000)
+
+    setTimeout(()=>{
+        prvFile.value=blodUrl
+    },4000)
+   console.log('%c [ blodUrl ]-175', 'font-size:13px; background:pink; color:#bf2c9f;', blodUrl)
+    console.log('%c [ conFile ]-169', 'font-size:13px; background:pink; color:#bf2c9f;', conFile)
+    console.log('%c [ chunkList ]-160', 'font-size:13px; background:pink; color:#bf2c9f;', chunkList)
+
+
+    if (type !== '' && type) {
+        var url = window.URL.createObjectURL(file);
+        prvFile.value = url
+        console.log('%c [ url ]-139', 'font-size:13px; background:pink; color:#bf2c9f;', url)
+    } else {
+        ElMessage({
+            message: 'Warning, this is a warning message.',
+            type: 'warning',
+        })
+    }
+
+
+}
 function title() {
     if (defineExposeTest.value) {
         console.log("Current count:", defineExposeTest.value.count)
@@ -252,6 +336,41 @@ const data = reactive([
 ])
 let elTree = ref()
 
+/**
+ * @description: 选择文件夹
+ * @return {*}
+ */
+let choseFiles = async () => {
+    let handle = await showDirectoryPicker()
+    await openFiles(handle)
+    let fileHandle = handle.children[3]
+    if (fileHandle.kind !== 'file') {
+        ElMessage({
+            message: '没有选择文件，暂不展示',
+            type: 'warning',
+        })
+        return
+    }
+    let file = await fileHandle.getFile()
+    let reader = new FileReader()
+    reader.readAsText(file)
+    reader.onload = e => {
+        console.log(e.target.result)
+        filesContent.value = e.target.result
+    }
+}
+let openFiles = async (filePaths) => {
+    if (!filePaths.kind || filePaths.kind === 'file') {
+        return
+    }
+    // entries: 异步迭代器，用于遍历目录下的所有文件
+    let entries = await filePaths.values()
+    filePaths.children = []
+    for await (const entry of entries) {
+        filePaths.children.push(entry)
+        await openFiles(entry)
+    }
+}
 let remove = () => {
     //注意这里是shift
     lists.shift()
@@ -365,12 +484,13 @@ let down = () => {
 </script>
 
 <style>
-body {
+body{
     background-image: url("https://bing.img.run/rand.php");
-    background-size: cover;
-    background-attachment: fixed;
+  background-size: cover;
+  background-attachment: fixed;
+  max-width: 100vw !important;
+  overflow-x: hidden
 }
-
 .testP {
     background-color: gray;
     line-height: 72px;
