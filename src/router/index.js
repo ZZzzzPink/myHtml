@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  // history: createWebHistory(process.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -14,9 +15,13 @@ const router = createRouter({
       component: ()=>import('../components/NumberFlapper.vue')
     },
     {
-      path: '/r',
       name: 'rou',
       component: ()=>import('../components/RouterCom.vue')
+    },
+    {
+      path: '/t',
+      name: 'test',
+      component: ()=>import('../components/test.vue')
     }
   ]
 })
