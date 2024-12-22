@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import './assets/main.css'
 import "virtual:uno.css"
 import "video.js/dist/video-js.css"
@@ -28,3 +29,34 @@ app.use(createPinia())
 app.use(router)
 
 app.mount("#app")
+=======
+import './assets/css/base.css'
+import './assets/fonts/font.css'
+
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+
+// 视差组件
+import VueKinesis from "vue-kinesis";
+// 点击交互组件
+import VWave from 'v-wave'
+
+
+import vant from 'vant'
+import 'vant/lib/index.css'
+
+
+
+import App from './App.vue'
+import router from './router'
+
+const app = createApp(App)
+
+app.use(VueKinesis);
+app.use(VWave);
+app.use(createPinia())
+app.use(router)
+app.use(vant)
+
+app.mount('#app')
+>>>>>>> 0823cf00a7d60d5f725518e35ca13ed6b7b70802
