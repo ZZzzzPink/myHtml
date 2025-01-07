@@ -241,6 +241,7 @@ let fileChange = (e) => {
 }
 function title() {
     if (defineExposeTest.value) {
+        console.log('%c [ defineExposeTest.value ]-162', 'font-size:13px; background:pink; color:#bf2c9f;', defineExposeTest.value)
         console.log("Current count:", defineExposeTest.value.count)
         console.log("Count after increment:", defineExposeTest.value.count)
     }

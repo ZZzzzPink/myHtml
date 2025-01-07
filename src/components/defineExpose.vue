@@ -20,10 +20,14 @@ onMounted(() => {
     console.log('%c [ title ]-18', 'font-size:13px; background:pink; color:#bf2c9f;',porps.title)
 })
 
+let func=()=>{
+    console.log('%c [ func ]-20', 'font-size:13px; background:pink; color:#bf2c9f;', count)
+}
+
 
 
 defineExpose({
-    count,
+    count,func
 })
 </script>
 
