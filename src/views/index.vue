@@ -133,7 +133,7 @@ import {
     watch,
     ref,
     onBeforeUnmount,
-    getCurrentInstance,
+    getCurrentInstance
 } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { image } from "../api/api/image.js"
