@@ -18,10 +18,15 @@ import "element-plus/dist/index.css"
 import Vant from "vant"
 import "vant/lib/index.css"
 
+import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+
+
 process.env.NODE_ENV !== "production" && updateBuild.start()
 const app = createApp(App)
 app.config.globalProperties.$test = request
 app.use(Vant)
+app.use(VueVideoPlayer)
 app.use(ElementPlus)
 app.use(Antd)
 app.use(createPinia())

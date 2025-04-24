@@ -9,6 +9,18 @@
     </div>
     <button class="mt-3" @click="click" size="sm" variant="info">CLICK ME</button>
   </div>
+
+  <div class="box">
+    <img src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/uni-app.png" alt="">
+    <img src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/uni-app.png" alt="">
+      uni-app x 中没有js引擎和webview，不支持和vue页面并存
+  </div>
+
+  <div>
+    <img style="width: 230px;height: 230px;" src="../assets/images/18147ddd4d1824c8cdde4ee32256259.png" alt="">
+    <br><img style="width: 230px;height: 230px;" src="../assets/images/36e3cb42ad5c578be3abe8ef442c4a2.png" alt="">
+    <br><img style="width: 230px;height: 230px;" src="../assets/images/f8de6d780a5081cbaf898b4fde5bcd2.png" alt="">
+  </div>
 </template>
 
 <script>
@@ -123,4 +135,13 @@ export default {
     transform: perspective(80px) rotateX(-180deg);
   }
 }
+.box{
+  width: 10em;
+  /* display: flex;
+  flex-wrap: wrap; */
+  img{
+    width: 2em;
+  }
+  border: 1px solid red;
+} 
 </style>

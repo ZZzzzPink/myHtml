@@ -1,11 +1,11 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import NumberFlapper from './components/NumberFlapper.vue';
+import { getCurrentInstance } from 'vue';
+window.$this = getCurrentInstance().appContext.config.globalProperties
 </script>
 
 <template>
- 
-
   <RouterView  />
 </template>
 

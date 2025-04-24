@@ -1,26 +1,30 @@
 <template>
+    <!-- <video src="../assets/video/output888881010.webm" controls style="background-color: #36d;" loop></video> -->
     {{ count }}
     <block v-if="filesContent !== ''">
-        {{ filesContent }} 
+        {{ filesContent }}
     </block>
     <el-button type="primary" size="default" @click="choseFiles">点击选择文件夹</el-button>
 
-    <input type="file" @change="fileChange($event)"></input>
-    <vue-office-docx :src="prvFile" style="height: 500px;" />
+    <!-- <input type="file" @change="fileChange($event)"></input> -->
+    <vue-office-docx :src="prvFile" style="height: 500px" />
     <!-- @rendered="renderedHandler"
         @error="errorHandler" -->
-    <iframe v-if="prvFile&& prvFile!==''" style="width: 300px;height: 300px;" :src="prvFile" frameborder="0"></iframe>
+    <iframe v-if="prvFile && prvFile !== ''" style="width: 300px; height: 300px" :src="prvFile"
+        frameborder="0"></iframe>
+    <el-image src="@/assets/images/飘.png" fit="fill" :lazy="true"></el-image>
+    <p>深拷贝 structuredClone{{ obj32.name }}</p>
+    <button @click="() => obj2.name = '李四'">点击</button>
     <comPone ref="defineExposeTest" title="传值">
-            
-            <h4>插槽</h4>
+        <h4>插槽</h4>
         <template v-slot:header>
-            <h3 >具名插槽</h3>
+            <h3>具名插槽</h3>
         </template>
-        <template v-slot:data="res" >
+        <template v-slot:data="res">
             作用域
             {{ res.data[0] }}
         </template>
-    <!-- <h4>插槽</h4> -->
+        <!-- <h4>插槽</h4> -->
     </comPone>
     <RouterLink to="/progressBar">跳转圆形进度条</RouterLink>
     <div class="c-#0284c7">unoCSS使用</div>
@@ -31,9 +35,10 @@
         </li>
     </ul>
     <button @click="remove">删除</button>
-    <video class="video-js" id="playerId">
-        <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" />
-    </video>
+    <video-player class="vjs-custom-skin" :options="playerOptions" @ready="playerReadied"
+        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4">
+    </video-player>
+    <!-- https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4 -->
 
     <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
         style="width: 240px" :props="{ value: 'label', label: 'label' }" node-key="value" @node-click="cli()" />
@@ -44,7 +49,9 @@
     <button @click="rout">编程式路由 query</button>
     <button @click="routP">编程式路由 params</button>
     <button @click="routT">跳转测试</button>
+    <button @click="() => router.push('/luckyDraw')">抽奖</button>
     <RouterLink style="text-decoration: none" to="/n" class="flex">点击跳转</RouterLink>
+    <button @click="routC">1241234141</button>
     <p>vue3</p>
     <p>{{ num }}</p>
     <p>{{ com }}</p>
@@ -127,121 +134,164 @@ import {
     ref,
     onBeforeUnmount,
     getCurrentInstance,
-    
 } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { image } from "../api/api/image.js"
 // pinia选项式写法
 import { PiniaTest } from "../stores/PiniaTest"
 // pinia组合式写法
-import {useCounterStore} from "../stores/counter.js"
+import { useCounterStore } from "../stores/counter.js"
 import { storeToRefs } from "pinia"
 import videojs from "video.js"
 import comPone from "../components/defineExpose.vue"
-import { ElMessage } from 'element-plus'
-import VueOfficeDocx from '@vue-office/docx'
-import Vconsole from 'vconsole'
-if (process.env.NODE_ENV == 'development') {
+import { ElMessage } from "element-plus"
+import VueOfficeDocx from "@vue-office/docx"
+import Vconsole from "vconsole"
+if (process.env.NODE_ENV == "development") {
     let vConsole = new Vconsole()
 }
-let a={name:'张三'}
-let obj={a}
-let obj1={a:{name:'张三'}}
-let obj3={}
-obj3.self='a'
-console.log('%c [ obj ]-135', 'font-size:13px; background:pink; color:#bf2c9f;', obj,obj1,obj3)
+let router = useRouter()
+let a = { name: "张三" }
+let obj = { a }
+let obj1 = { a: { name: "张三" } }
+let obj3 = {}
+let obj2 = reactive({ name: "张三" })
+let obj32 = reactive({})
+const playerOptions = ref({
+    playbackRates: [0.5, 1.0, 2.0], // 可选的播放速度
+    autoplay: true, // 如果为true,浏览器准备好时开始回放。
+    muted: true, // 默认情况下将会消除任何音频。
+    loop: false, // 是否视频一结束就重新开始。
+    controls: true, // 是否显示默认控件，比如播放/暂停按钮
+    preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+    language: "zh-CN",
+    aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+    fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+    sources: [
+        {
+            type: "video/webm", // 类型
+            src: "../assets/video/output888881010.webm", // url地址，若为后端返回，需为文件流
+        },
+    ],
+    poster: "", // 封面地址,不设置会默认第一帧为封面
+    notSupportedMessage: "此视频暂无法播放，请稍后再试", // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+    controlBar: {
+        timeDivider: true, // 当前时间和持续时间的分隔符
+        durationDisplay: true, // 显示持续时间
+        remainingTimeDisplay: true, // 是否显示剩余时间功能
+        fullscreenToggle: true, // 是否显示全屏按钮
+    },
+})
+obj3.self = "a"
+console.log("%c [ obj ]-135", "font-size:13px; background:pink; color:#bf2c9f;", obj, obj1, obj3)
 
-console.log('%c [ import.meta.env ]-136', 'font-size:13px; background:pink; color:#bf2c9f;', import.meta.env.VITE_ENV,import.meta.env.VITE_TITLE)
+console.log(
+    "%c [ import.meta.env ]-136",
+    "font-size:13px; background:pink; color:#bf2c9f;",
+    import.meta.env.VITE_ENV,
+    import.meta.env.VITE_TITLE
+)
 
 const modules = import.meta.glob("@/views/**/*.vue")
 console.log("%c [ modules ]-157", "font-size:13px; background:pink; color:#bf2c9f;", modules)
 
 // pinia选项式写法
-let Store= PiniaTest()
-console.log('%c [ Store ]-147', 'font-size:13px; background:pink; color:#bf2c9f;', Store.num)
+let Store = PiniaTest()
+console.log("%c [ Store ]-147", "font-size:13px; background:pink; color:#bf2c9f;", Store.num)
 
 // pinia组合式写法
-let { count,doubleCount }=storeToRefs(useCounterStore())
-let testFn=()=>{
-    let store=useCounterStore()
+let { count, doubleCount } = storeToRefs(useCounterStore())
+let testFn = () => {
+    let store = useCounterStore()
     store.increment()
 }
 testFn()
 
 for (var i = 0; i < 5; i++) {
-  setTimeout(function() {
-    console.log(i);
-  }, 1000);
+    setTimeout(function () {
+        console.log(i)
+    }, 1000)
 }
 
+const routC = () => {
+    router.replace("/n")
+}
 
-
-console.log('%c [ count ]-155', 'font-size:13px; background:pink; color:#bf2c9f;', count.value)
+console.log("%c [ count ]-155", "font-size:13px; background:pink; color:#bf2c9f;", count.value)
 
 let test = getCurrentInstance().appContext.config.globalProperties
 
 let defineExposeTest = ref()
 
 let prvFile = ref(null)
-let filesContent = ref('')
+let filesContent = ref("")
 let fileChange = (e) => {
     prvFile.value = false
     let file = e.target.files[0]
-    console.log('%c [ file ]-148', 'font-size:13px; background:pink; color:#bf2c9f;', file.slice(0,100))
+    console.log(
+        "%c [ file ]-148",
+        "font-size:13px; background:pink; color:#bf2c9f;",
+        file.slice(0, 100)
+    )
     let type = file.type
-    console.log('%c [ type ]-135', 'font-size:13px; background:pink; color:#bf2c9f;', type)
+    console.log("%c [ type ]-135", "font-size:13px; background:pink; color:#bf2c9f;", type)
     // type.includes('image')|| type.includes('video')
 
-    let axiosArray = [];
-    let chunkList = [];
-    let chunkSize = file.size / 6;
-    let current = 0;
-    let i = 0;
-    let fileName = new Date().getTime() + "_" + file.name;
+    let axiosArray = []
+    let chunkList = []
+    let chunkSize = file.size / 6
+    let current = 0
+    let i = 0
+    let fileName = new Date().getTime() + "_" + file.name
     while (current < 6) {
         chunkList.push({
             chunk: file.slice(current * chunkSize, (current + 1) * chunkSize),
-            fileName: current + "_" + fileName
-        });
-        current++;
+            fileName: current + "_" + fileName,
+        })
+        current++
     }
-    let conFile=[]
-    chunkList.forEach((item)=>{
+    let conFile = []
+    chunkList.forEach((item) => {
         conFile.push(item.chunk)
     })
     const blob = new Blob(conFile, {
-        type
+        type,
     })
-    console.log('%c [ blob ]-171', 'font-size:13px; background:pink; color:#bf2c9f;', blob)
-    let blodUrl= window.URL.createObjectURL(blob)
-    setTimeout(()=>{
-        prvFile.value=''
-    },2000)
+    console.log("%c [ blob ]-171", "font-size:13px; background:pink; color:#bf2c9f;", blob)
+    let blodUrl = window.URL.createObjectURL(blob)
+    setTimeout(() => {
+        prvFile.value = ""
+    }, 2000)
 
-    setTimeout(()=>{
-        prvFile.value=blodUrl
-    },4000)
-   console.log('%c [ blodUrl ]-175', 'font-size:13px; background:pink; color:#bf2c9f;', blodUrl)
-    console.log('%c [ conFile ]-169', 'font-size:13px; background:pink; color:#bf2c9f;', conFile)
-    console.log('%c [ chunkList ]-160', 'font-size:13px; background:pink; color:#bf2c9f;', chunkList)
+    setTimeout(() => {
+        prvFile.value = blodUrl
+    }, 4000)
+    console.log("%c [ blodUrl ]-175", "font-size:13px; background:pink; color:#bf2c9f;", blodUrl)
+    console.log("%c [ conFile ]-169", "font-size:13px; background:pink; color:#bf2c9f;", conFile)
+    console.log(
+        "%c [ chunkList ]-160",
+        "font-size:13px; background:pink; color:#bf2c9f;",
+        chunkList
+    )
 
-
-    if (type !== '' && type) {
-        var url = window.URL.createObjectURL(file);
+    if (type !== "" && type) {
+        var url = window.URL.createObjectURL(file)
         prvFile.value = url
-        console.log('%c [ url ]-139', 'font-size:13px; background:pink; color:#bf2c9f;', url)
+        console.log("%c [ url ]-139", "font-size:13px; background:pink; color:#bf2c9f;", url)
     } else {
         ElMessage({
-            message: 'Warning, this is a warning message.',
-            type: 'warning',
+            message: "Warning, this is a warning message.",
+            type: "warning",
         })
     }
-
-
 }
 function title() {
     if (defineExposeTest.value) {
-        console.log('%c [ defineExposeTest.value ]-162', 'font-size:13px; background:pink; color:#bf2c9f;', defineExposeTest.value)
+        console.log(
+            "%c [ defineExposeTest.value ]-162",
+            "font-size:13px; background:pink; color:#bf2c9f;",
+            defineExposeTest.value
+        )
         console.log("Current count:", defineExposeTest.value.count)
         console.log("Count after increment:", defineExposeTest.value.count)
     }
@@ -340,26 +390,68 @@ let elTree = ref()
  * @return {*}
  */
 let choseFiles = async () => {
-    let handle = await showDirectoryPicker()
-    await openFiles(handle)
-    let fileHandle = handle.children[3]
-    if (fileHandle.kind !== 'file') {
+    if (!window.showDirectoryPicker) {
         ElMessage({
-            message: '没有选择文件，暂不展示',
-            type: 'warning',
-        })
-        return
+            message: "当前浏览器不支持目录选择功能",
+            type: "error",
+        });
+        return;
     }
-    let file = await fileHandle.getFile()
-    let reader = new FileReader()
-    reader.readAsText(file)
-    reader.onload = e => {
-        console.log(e.target.result)
-        filesContent.value = e.target.result
+
+    try {
+        let handle = await showDirectoryPicker();
+        await openFiles(handle);
+
+        let fileHandle = null;
+        for (const child of handle.children) {
+            if (child.kind === "file") {
+                fileHandle = child;
+                break;
+            }
+        }
+
+        if (!fileHandle) {
+            ElMessage({
+                message: "未找到任何文件",
+                type: "warning",
+            });
+            return;
+        }
+
+        let file = await fileHandle.getFile();
+
+        if (!file.type.startsWith("text/")) {
+            ElMessage({
+                message: "仅支持文本文件",
+                type: "warning",
+            });
+            return;
+        }
+
+        let reader = new FileReader();
+        reader.readAsText(file);
+
+        reader.onload = (e) => {
+            console.log(e.target.result);
+            filesContent.value = e.target.result;
+        };
+
+        reader.onerror = (e) => {
+            console.error("文件读取失败:", e.target.error);
+            ElMessage({
+                message: "文件读取失败，请检查文件格式",
+                type: "error",
+            });
+        };
+    } catch (error) {
+        ElMessage({
+            message: "目录选择失败：" + error.message,
+            type: "error",
+        });
     }
-}
+};
 let openFiles = async (filePaths) => {
-    if (!filePaths.kind || filePaths.kind === 'file') {
+    if (!filePaths.kind || filePaths.kind === "file") {
         return
     }
     // entries: 异步迭代器，用于遍历目录下的所有文件
@@ -388,10 +480,11 @@ let cli = () => {
     }, 100)
 }
 
-let router = useRouter()
 let imageUrl = ref("")
 
 onMounted(async () => {
+    console.log("🟣 window -6", "👉", window)
+
     title()
     // imageUrl.value = await image();
     // console.log(com.value);
@@ -483,13 +576,14 @@ let down = () => {
 </script>
 
 <style>
-body{
+body {
     background-image: url("https://bing.img.run/rand.php");
-  background-size: cover;
-  background-attachment: fixed;
-  max-width: 100vw !important;
-  overflow-x: hidden
+    background-size: cover;
+    background-attachment: fixed;
+    max-width: 100vw !important;
+    overflow-x: hidden;
 }
+
 .testP {
     background-color: gray;
     line-height: 72px;
