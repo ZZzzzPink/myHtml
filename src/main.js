@@ -21,15 +21,26 @@ import "vant/lib/index.css"
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 
+// 颜色拾取器
+import Vue3ColorPicker from "vue3-colorpicker";
+import "vue3-colorpicker/style.css";
+
+// pinia持久化插件
+import piniaPersist from 'pinia-plugin-persist'
 
 process.env.NODE_ENV !== "production" && updateBuild.start()
+
+const pinia = createPinia()
+pinia.use(piniaPersist)
+
 const app = createApp(App)
 app.config.globalProperties.$test = request
 app.use(Vant)
 app.use(VueVideoPlayer)
 app.use(ElementPlus)
 app.use(Antd)
-app.use(createPinia())
+app.use(pinia)
+app.use(Vue3ColorPicker)
 app.use(router)
 
 app.mount("#app")

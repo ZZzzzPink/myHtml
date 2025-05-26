@@ -1,15 +1,28 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import NumberFlapper from './components/NumberFlapper.vue';
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, onMounted } from 'vue';
+import { PiniaTest } from './stores/PiniaTest';
+import { storeToRefs } from 'pinia';
+
+const { themeColor } = storeToRefs(PiniaTest())
+
 window.$this = getCurrentInstance().appContext.config.globalProperties
+onMounted(() => {
+  console.log("🟣  -8", "👉", themeColor.value)
+  document.documentElement.style.setProperty('--theme-color', themeColor.value)
+})
 </script>
 
 <template>
-  <RouterView  />
+  <RouterView />
 </template>
 
 <style scoped>
+:root {
+  --theme-color: #fff;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;

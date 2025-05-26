@@ -2,18 +2,18 @@
   <div style="width: 3rem;">
     <div class="flapper-container text-center text-white bg-dark disable-select position-relative">
       <div id="flapper-top" class="flapper-content flapper-top position-relative" :class="flapperAni">
-        <div :class="{flapping: isFlapping}" style="text-align: center;">{{ numberArray[aboveIndex] }}</div>
+        <div :class="{ flapping: isFlapping }" style="text-align: center;">{{ numberArray[aboveIndex] }}</div>
       </div>
-      <div class="flapper-content flapper-bottom" style="text-align: center;" >{{ numberArray[aboveIndex] }}</div>
+      <div class="flapper-content flapper-bottom" style="text-align: center;">{{ numberArray[aboveIndex] }}</div>
       <div class="flapper-content flapper-rear position-absolute">{{ numberArray[rearIndex] }}</div>
     </div>
     <button class="mt-3" @click="click" size="sm" variant="info">CLICK ME</button>
   </div>
 
-  <div class="box">
+  <div class="box" style="color: var(--theme-color);">
     <img src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/uni-app.png" alt="">
     <img src="https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/uni-app.png" alt="">
-      uni-app x 中没有js引擎和webview，不支持和vue页面并存
+    uni-app x 中没有js引擎和webview，不支持和vue页面并存
   </div>
 
   <div>
@@ -26,7 +26,7 @@
 <script>
 export default {
   name: 'NumberFlapper',
-  data () {
+  data() {
     return {
       aboveNum: 3,
       rearNum: 4,
@@ -38,19 +38,19 @@ export default {
     }
   },
   methods: {
-    click () {
+    click() {
       if (!this.flapperAni) {
         this.flapperAni = 'rotate'
       }
     },
 
-    setTime(){
-      setInterval(()=>{
+    setTime() {
+      setInterval(() => {
         this.click()
-      },100)
+      }, 100)
     }
   },
-  mounted () {
+  mounted() {
     const vm = this
     const flapperTop = document.getElementById('flapper-top')
     flapperTop.addEventListener('animationstart', (e) => {
@@ -128,20 +128,26 @@ export default {
   0% {
     transform: perspective(110px) rotateX(0deg);
   }
+
   50% {
     transform: perspective(80px) rotateX(-90deg);
   }
+
   100% {
     transform: perspective(80px) rotateX(-180deg);
   }
 }
-.box{
+
+.box {
   width: 10em;
+
   /* display: flex;
   flex-wrap: wrap; */
-  img{
+  /* word-wrap: break-all; */
+  img {
     width: 2em;
   }
+
   border: 1px solid red;
-} 
+}
 </style>

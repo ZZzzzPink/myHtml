@@ -1,14 +1,15 @@
 /**
  * @description: 选项式写法
  */
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { defineStore } from "pinia"
+import { ref, computed } from "vue"
 
-export const PiniaTest = defineStore('storeText', {
+export const PiniaTest = defineStore("storeText", {
     state() {
         return {
-            com:10,
-            num:20
+            com: 10,
+            num: 20,
+            themeColor: "#fff",
         }
     },
     getters: {
@@ -16,11 +17,20 @@ export const PiniaTest = defineStore('storeText', {
         getNum: (state) => state.num,
     },
     actions: {
-        setCom(val){
+        setCom(val) {
             this.com = val
         },
-        setNum(val){
+        setNum(val) {
             this.num = val
-        }
-    }
+        },
+    },
+    persist: {
+        enabled: true,
+        strategies: [
+            {
+                key: "storeText",
+                storage: localStorage,
+            },
+        ],
+    },
 })

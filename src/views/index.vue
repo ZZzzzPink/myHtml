@@ -1,4 +1,6 @@
 <template>
+    <color-picker v-model:pureColor="pureColor" @pureColorChange="changeTheme" />
+
     <!-- <video src="../assets/video/output888881010.webm" controls style="background-color: #36d;" loop></video> -->
     {{ count }}
     <block v-if="filesContent !== ''">
@@ -35,7 +37,7 @@
         </li>
     </ul>
     <button @click="remove">删除</button>
-    <video-player class="vjs-custom-skin" :options="playerOptions" @ready="playerReadied"
+    <video-player class="vjs-custom-skin" :options="playerOptions"
         src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4">
     </video-player>
     <!-- https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4 -->
@@ -147,9 +149,13 @@ import comPone from "../components/defineExpose.vue"
 import { ElMessage } from "element-plus"
 import VueOfficeDocx from "@vue-office/docx"
 import Vconsole from "vconsole"
+import { theme } from "ant-design-vue"
 if (process.env.NODE_ENV == "development") {
     let vConsole = new Vconsole()
 }
+// 主题色切换
+let isFFF = ref(false)
+let pureColor = ref(null)
 let router = useRouter()
 let a = { name: "张三" }
 let obj = { a }
@@ -482,8 +488,26 @@ let cli = () => {
 
 let imageUrl = ref("")
 
+const changeTheme = () => {
+    document.documentElement.style.setProperty("--theme-color", pureColor.value)
+    Store.themeColor = pureColor.value
+    return
+    // 获取dom节点
+    let rootDom = document.documentElement
+    // 获取当前主体颜色
+    let theme = rootDom.style.getPropertyValue('--theme-color')
+    // 根据颜色设置不同值
+    if (isFFF.value) {
+        rootDom.style.setProperty('--theme-color', '#36d')
+    } else {
+        rootDom.style.setProperty('--theme-color', '#fff')
+    }
+    Store.themeColor = rootDom.style.getPropertyValue('--theme-color')
+    console.log("🟣 Store.themeColor -502", "👉", Store.themeColor)
+}
+
 onMounted(async () => {
-    console.log("🟣 window -6", "👉", window)
+    pureColor.value = Store.themeColor
 
     title()
     // imageUrl.value = await image();
@@ -575,7 +599,13 @@ let down = () => {
 }
 </script>
 
-<style>
+<style scoped>
+p,
+button,
+div {
+    color: var(--theme-color)
+}
+
 body {
     background-image: url("https://bing.img.run/rand.php");
     background-size: cover;
