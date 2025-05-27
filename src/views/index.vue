@@ -223,7 +223,7 @@ let filesContent = ref("")
 let fileChange = (e) => {
     prvFile.value = false
     let file = e.target.files[0]
-    )
+
     let type = file.type
     // type.includes('image')|| type.includes('video')
 
@@ -271,7 +271,7 @@ function title() {
     }
 }
 
-)
+
 
 const value = ref(null)
 let lists = reactive([
@@ -489,10 +489,7 @@ onMounted(async () => {
     setInterval(() => {
         localStorage.setItem("index", (index += 1))
     }, 1000)
-
-        "font-size:13px; background:pink; color:#bf2c9f;",
-        getData()
-    )
+    getData()
 })
 /**
  * @description: 全局挂载request测试
