@@ -9,7 +9,6 @@ const { themeColor } = storeToRefs(PiniaTest())
 
 window.$this = getCurrentInstance().appContext.config.globalProperties
 onMounted(() => {
-  console.log("🟣  -8", "👉", themeColor.value)
   document.documentElement.style.setProperty('--theme-color', themeColor.value)
 })
 </script>

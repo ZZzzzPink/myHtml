@@ -189,21 +189,12 @@ const playerOptions = ref({
     },
 })
 obj3.self = "a"
-console.log("%c [ obj ]-135", "font-size:13px; background:pink; color:#bf2c9f;", obj, obj1, obj3)
 
-console.log(
-    "%c [ import.meta.env ]-136",
-    "font-size:13px; background:pink; color:#bf2c9f;",
-    import.meta.env.VITE_ENV,
-    import.meta.env.VITE_TITLE
-)
 
 const modules = import.meta.glob("@/views/**/*.vue")
-console.log("%c [ modules ]-157", "font-size:13px; background:pink; color:#bf2c9f;", modules)
 
 // pinia选项式写法
 let Store = PiniaTest()
-console.log("%c [ Store ]-147", "font-size:13px; background:pink; color:#bf2c9f;", Store.num)
 
 // pinia组合式写法
 let { count, doubleCount } = storeToRefs(useCounterStore())
@@ -215,7 +206,6 @@ testFn()
 
 for (var i = 0; i < 5; i++) {
     setTimeout(function () {
-        console.log(i)
     }, 1000)
 }
 
@@ -223,7 +213,6 @@ const routC = () => {
     router.replace("/n")
 }
 
-console.log("%c [ count ]-155", "font-size:13px; background:pink; color:#bf2c9f;", count.value)
 
 let test = getCurrentInstance().appContext.config.globalProperties
 
@@ -234,13 +223,8 @@ let filesContent = ref("")
 let fileChange = (e) => {
     prvFile.value = false
     let file = e.target.files[0]
-    console.log(
-        "%c [ file ]-148",
-        "font-size:13px; background:pink; color:#bf2c9f;",
-        file.slice(0, 100)
     )
     let type = file.type
-    console.log("%c [ type ]-135", "font-size:13px; background:pink; color:#bf2c9f;", type)
     // type.includes('image')|| type.includes('video')
 
     let axiosArray = []
@@ -263,7 +247,6 @@ let fileChange = (e) => {
     const blob = new Blob(conFile, {
         type,
     })
-    console.log("%c [ blob ]-171", "font-size:13px; background:pink; color:#bf2c9f;", blob)
     let blodUrl = window.URL.createObjectURL(blob)
     setTimeout(() => {
         prvFile.value = ""
@@ -272,18 +255,10 @@ let fileChange = (e) => {
     setTimeout(() => {
         prvFile.value = blodUrl
     }, 4000)
-    console.log("%c [ blodUrl ]-175", "font-size:13px; background:pink; color:#bf2c9f;", blodUrl)
-    console.log("%c [ conFile ]-169", "font-size:13px; background:pink; color:#bf2c9f;", conFile)
-    console.log(
-        "%c [ chunkList ]-160",
-        "font-size:13px; background:pink; color:#bf2c9f;",
-        chunkList
-    )
 
     if (type !== "" && type) {
         var url = window.URL.createObjectURL(file)
         prvFile.value = url
-        console.log("%c [ url ]-139", "font-size:13px; background:pink; color:#bf2c9f;", url)
     } else {
         ElMessage({
             message: "Warning, this is a warning message.",
@@ -293,23 +268,9 @@ let fileChange = (e) => {
 }
 function title() {
     if (defineExposeTest.value) {
-        console.log(
-            "%c [ defineExposeTest.value ]-162",
-            "font-size:13px; background:pink; color:#bf2c9f;",
-            defineExposeTest.value
-        )
-        console.log("Current count:", defineExposeTest.value.count)
-        console.log("Count after increment:", defineExposeTest.value.count)
     }
 }
 
-console.log(
-    "%c [ test ]-147",
-    "font-size:13px; background:pink; color:#bf2c9f;",
-    test.$test({
-        url: "https://api.paugram.com/wallpaper/",
-        method: "get",
-    })
 )
 
 const value = ref(null)
@@ -438,7 +399,6 @@ let choseFiles = async () => {
         reader.readAsText(file);
 
         reader.onload = (e) => {
-            console.log(e.target.result);
             filesContent.value = e.target.result;
         };
 
@@ -482,7 +442,6 @@ let cli = () => {
         // 获取当前树组件选中项的唯一键值
         let data = elTree.value.getCurrentKey()
         // 打印选中项的名称和ID
-        console.log("name==>", value.value, "id==>", data)
     }, 100)
 }
 
@@ -503,7 +462,6 @@ const changeTheme = () => {
         rootDom.style.setProperty('--theme-color', '#fff')
     }
     Store.themeColor = rootDom.style.getPropertyValue('--theme-color')
-    console.log("🟣 Store.themeColor -502", "👉", Store.themeColor)
 }
 
 onMounted(async () => {
@@ -511,7 +469,6 @@ onMounted(async () => {
 
     title()
     // imageUrl.value = await image();
-    // console.log(com.value);
     let option = {
         controls: true,
         preload: "auto", // 预加载
@@ -524,10 +481,8 @@ onMounted(async () => {
     // player.src("https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4")
     player.on("ended", () => {
         //播放完成
-        console.log(2)
     })
     player.on("play", (e) => {
-        console.log(3, e)
     })
 
     let index = 1
@@ -535,8 +490,6 @@ onMounted(async () => {
         localStorage.setItem("index", (index += 1))
     }, 1000)
 
-    console.log(
-        "%c [ getData() ]-292",
         "font-size:13px; background:pink; color:#bf2c9f;",
         getData()
     )
@@ -552,19 +505,12 @@ let getData = async () => {
         method: "get",
     })
         .then((res) => {
-            console.log(
-                "%c [ res ]-308",
-                "font-size:13px; background:pink; color:#bf2c9f;",
-                res.hitokoto + "---" + res.from
-            )
         })
         .catch((err) => {
-            console.log(err)
         })
 }
 
 onBeforeUnmount(() => {
-    console.log("[ unmount ] >", "unmount")
 })
 
 let rout = () => {
