@@ -37,9 +37,7 @@
         </li>
     </ul>
     <button @click="remove">删除</button>
-    <video-player class="vjs-custom-skin" :options="playerOptions"
-        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4">
-    </video-player>
+    <video-player class="vjs-custom-skin" :options="playerOptions" />
     <!-- https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4 -->
 
     <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
@@ -176,7 +174,7 @@ const playerOptions = ref({
     sources: [
         {
             type: "video/webm", // 类型
-            src: "../assets/video/output888881010.webm", // url地址，若为后端返回，需为文件流
+            src: "https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4", // url地址，若为后端返回，需为文件流
         },
     ],
     poster: "", // 封面地址,不设置会默认第一帧为封面
@@ -190,7 +188,6 @@ const playerOptions = ref({
 })
 obj3.self = "a"
 
-
 const modules = import.meta.glob("@/views/**/*.vue")
 
 // pinia选项式写法
@@ -202,6 +199,7 @@ let testFn = () => {
     let store = useCounterStore()
     store.increment()
 }
+
 testFn()
 
 for (var i = 0; i < 5; i++) {
@@ -212,7 +210,6 @@ for (var i = 0; i < 5; i++) {
 const routC = () => {
     router.replace("/n")
 }
-
 
 let test = getCurrentInstance().appContext.config.globalProperties
 
