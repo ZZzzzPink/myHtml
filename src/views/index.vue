@@ -268,8 +268,6 @@ function title() {
     }
 }
 
-
-
 const value = ref(null)
 let lists = reactive([
     { id: 1, text: "张" },
