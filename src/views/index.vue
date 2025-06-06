@@ -17,17 +17,20 @@
     <el-image src="@/assets/images/飘.png" fit="fill" :lazy="true"></el-image>
     <p>深拷贝 structuredClone{{ obj32.name }}</p>
     <button @click="() => obj2.name = '李四'">点击</button>
-    <comPone ref="defineExposeTest" title="传值">
-        <h4>插槽</h4>
-        <template v-slot:header>
-            <h3>具名插槽</h3>
-        </template>
-        <template v-slot:data="res">
-            作用域
-            {{ res.data[0] }}
-        </template>
-        <!-- <h4>插槽</h4> -->
-    </comPone>
+    <div class="heder">
+
+        <comPone ref="defineExposeTest" title="传值">
+            <h4>插槽</h4>
+            <template v-slot:header>
+                <h3>具名插槽</h3>
+            </template>
+            <template v-slot:data="res">
+                作用域
+                {{ res.data[0] }}
+            </template>
+            <!-- <h4>插槽</h4> -->
+        </comPone>
+    </div>
     <RouterLink to="/progressBar">跳转圆形进度条</RouterLink>
     <div class="c-#0284c7">unoCSS使用</div>
     <ul>
@@ -539,20 +542,13 @@ let down = () => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 p,
 button,
 div {
     color: var(--theme-color)
 }
 
-body {
-    background-image: url("https://bing.img.run/rand.php");
-    background-size: cover;
-    background-attachment: fixed;
-    max-width: 100vw !important;
-    overflow-x: hidden;
-}
 
 .testP {
     background-color: gray;
@@ -601,5 +597,11 @@ body {
 
 .el-carousel__item:nth-child(2n + 1) {
     background-color: #d3dce6;
+}
+
+// scoped是隔离自己控制别人
+// :deep(.class)为v3 样式穿透 双方都使用scoped才有用
+:deep(.title2) {
+    color: red !important;
 }
 </style>

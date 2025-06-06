@@ -17,7 +17,15 @@ onMounted(() => {
   <RouterView />
 </template>
 
-<style scoped>
+<style>
+body {
+  background-image: url("https://bing.img.run/rand.php");
+  background-size: cover;
+  background-attachment: fixed;
+  max-width: 100vw !important;
+  overflow-x: hidden;
+}
+
 :root {
   --theme-color: #fff;
 }

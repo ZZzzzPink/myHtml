@@ -1,7 +1,7 @@
 <template>
     <slot name="header"></slot>
     <slot :data="res" name="data"></slot>
-    <div>defineExpose测试 {{ title }}</div>
+    <div class="title2">defineExpose测试 {{ title }}</div>
     <slot></slot>
 </template>
 
@@ -31,4 +31,8 @@ defineExpose({
 })
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.title2{
+    color: greenyellow;
+}
+</style>
