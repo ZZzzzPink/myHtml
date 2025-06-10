@@ -602,6 +602,6 @@ div {
 // scoped是隔离自己控制别人
 // :deep(.class)为v3 样式穿透 双方都使用scoped才有用
 :deep(.title2) {
-    color: red !important;
+    color: rgb(47, 192, 115) !important;
 }
 </style>

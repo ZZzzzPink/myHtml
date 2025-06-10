@@ -8,8 +8,8 @@
 <script setup>
 import { onMounted, reactive, ref, watch } from "vue"
 let count = ref(0)
-let res =reactive(['张三','李四','王五'])
-let porps=defineProps({
+let res = reactive(['张三', '李四', '王五'])
+let porps = defineProps({
     title: {
         type: String,
         default: "2",
@@ -17,22 +17,22 @@ let porps=defineProps({
 })
 
 onMounted(() => {
-    console.log('%c [ title ]-18', 'font-size:13px; background:pink; color:#bf2c9f;',porps.title)
+    console.log('%c [ title ]-18', 'font-size:13px; background:pink; color:#bf2c9f;', porps.title)
 })
 
-let func=()=>{
+let func = () => {
     console.log('%c [ func ]-20', 'font-size:13px; background:pink; color:#bf2c9f;', count)
 }
 
 
 
 defineExpose({
-    count,func
+    count, func
 })
 </script>
 
 <style lang="scss" scoped>
-.title2{
+.title2 {
     color: greenyellow;
 }
 </style>
