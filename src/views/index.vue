@@ -40,7 +40,7 @@
         </li>
     </ul>
     <button @click="remove">删除</button>
-    <video-player class="vjs-custom-skin" :options="playerOptions" />
+    <video-player id="playerId" class="vjs-custom-skin" :options="playerOptions" />
     <!-- https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4 -->
 
     <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
@@ -124,6 +124,12 @@
         <p>2</p>
         <p>2</p>
         <p>2</p>
+    </div>
+
+    <div class="img-box">
+        <template v-for="item in 200">
+            <img class="img-item" data-src="https://bing.img.run/rand.php" src="" alt="">
+        </template>
     </div>
 </template>
 
@@ -464,6 +470,7 @@ const changeTheme = () => {
 }
 
 onMounted(async () => {
+    initObserver()
     pureColor.value = Store.themeColor
 
     title()
@@ -490,6 +497,25 @@ onMounted(async () => {
     }, 1000)
     getData()
 })
+
+/**图片懒加载 */
+const initObserver = () => {
+    const dom = document.querySelectorAll(".img-item")
+    const Observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                // entry.target.style.color = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
+                const img = entry.target
+                img.src = img.dataset.src
+                // 取消监听
+                observer.unobserve(entry.target)
+            }
+        })
+    })
+    dom.forEach(item => {
+        Observer.observe(item)
+    })
+}
 /**
  * @description: 全局挂载request测试
  * @return {*}
@@ -501,6 +527,7 @@ let getData = async () => {
         method: "get",
     })
         .then((res) => {
+        console.log("🟣 res -530", "👉", res)
         })
         .catch((err) => {
         })
@@ -603,5 +630,19 @@ div {
 // :deep(.class)为v3 样式穿透 双方都使用scoped才有用
 :deep(.title2) {
     color: rgb(47, 192, 115) !important;
+}
+
+.img-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .img-item {
+        width: 70%;
+        height: 100px;
+        margin-bottom: 20px;
+    }
 }
 </style>
