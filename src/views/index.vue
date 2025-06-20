@@ -26,6 +26,7 @@
                 作用域插槽数据: {{ res.data[0] }}
                 作用域插槽数据: {{ res.data[0] }}
             </template>
+            <!-- <h4>插槽</h4> -->
         </comPone>
     </div>
 
@@ -79,22 +80,8 @@
         <div class="container">
             <p v-for="i in 28" :key="i">测试内容 {{ i }}</p>
         </div>
-    <!-- 布局测试模块 -->
-    <div class="layout-section">
-        <div class="testP">粘性布局测试</div>
-        <div class="header">固定标题</div>
-        <div class="container">
-            <p v-for="i in 28" :key="i">测试内容 {{ i }}</p>
-        </div>
     </div>
 
-    <!-- 图片懒加载模块 -->
-    <div class="lazy-load-section">
-        <div class="img-box">
-            <template v-for="item in 20">
-                <img class="img-item" data-src="https://bing.img.run/rand.php" src="" :alt="'图片' + item">
-            </template>
-        </div>
     <!-- 图片懒加载模块 -->
     <div class="lazy-load-section">
         <div class="img-box">
@@ -119,7 +106,6 @@ import comPone from '../components/defineExpose.vue'
 
 /* 开发环境启用vConsole */
 if (process.env.NODE_ENV == "development") {
-    new Vconsole()
     new Vconsole()
 }
 
@@ -247,7 +233,6 @@ const handleChooseFiles = async () => {
 
     try {
         const handle = await showDirectoryPicker();
-        const handle = await showDirectoryPicker();
         await openFiles(handle);
 
         let fileHandle = null;
@@ -267,7 +252,6 @@ const handleChooseFiles = async () => {
         }
 
         const file = await fileHandle.getFile();
-        const file = await fileHandle.getFile();
 
         if (!file.type.startsWith("text/")) {
             ElMessage({
@@ -277,7 +261,6 @@ const handleChooseFiles = async () => {
             return;
         }
 
-        const reader = new FileReader();
         const reader = new FileReader();
         reader.readAsText(file);
 
@@ -304,19 +287,12 @@ const handleChooseFiles = async () => {
 const openFiles = async (filePaths) => {
     if (!filePaths.kind || filePaths.kind === "file") {
         return;
-        return;
     }
 
     const entries = await filePaths.values();
     filePaths.children = [];
 
-
-    const entries = await filePaths.values();
-    filePaths.children = [];
-
     for await (const entry of entries) {
-        filePaths.children.push(entry);
-        await openFiles(entry);
         filePaths.children.push(entry);
         await openFiles(entry);
     }
