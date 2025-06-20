@@ -57,7 +57,8 @@
     <!-- 树形选择模块 -->
     <div class="tree-section">
         <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
-            style="width: 240px" :props="{ value: 'label', label: 'label' }" node-key="value" @node-click="handleTreeNodeClick" />
+            style="width: 240px" :props="{ value: 'label', label: 'label' }" node-key="value"
+            @node-click="handleTreeNodeClick" />
         <el-button type="success" @click="handleDownload">下载测试</el-button>
     </div>
 
@@ -118,9 +119,9 @@ const prvFile = ref(null)
 const filesContent = ref('')
 
 const lists = reactive([
-  { id: 1, text: '张' },
-  { id: 2, text: '吕' }, 
-  { id: 3, text: '王' }
+    { id: 1, text: '张' },
+    { id: 2, text: '吕' },
+    { id: 3, text: '王' }
 ])
 
 const value = ref(null)
