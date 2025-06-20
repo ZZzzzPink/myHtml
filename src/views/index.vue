@@ -1,154 +1,99 @@
 <template>
-    <color-picker v-model:pureColor="pureColor" @pureColorChange="changeTheme" />
+    <!-- 主题切换模块 -->
+    <div class="theme-section">
+        <color-picker v-model:pureColor="pureColor" @pureColorChange="changeTheme" />
+        <p>当前计数: {{ count }}</p>
+    </div>
 
-    <!-- <video src="../assets/video/output888881010.webm" controls style="background-color: #36d;" loop></video> -->
-    {{ count }}
-    <block v-if="filesContent !== ''">
-        {{ filesContent }}
-    </block>
-    <el-button type="primary" size="default" @click="choseFiles">点击选择文件夹</el-button>
+    <!-- 文件操作模块 -->
+    <div class="file-section">
+        <el-button type="primary" size="default" @click="choseFiles">选择文件夹</el-button>
+        <block v-if="filesContent !== ''">
+            {{ filesContent }}
+        </block>
+        <vue-office-docx :src="prvFile" style="height: 500px" />
+        <iframe v-if="prvFile" style="width: 300px; height: 300px" :src="prvFile" frameborder="0"></iframe>
+    </div>
 
-    <!-- <input type="file" @change="fileChange($event)"></input> -->
-    <vue-office-docx :src="prvFile" style="height: 500px" />
-    <!-- @rendered="renderedHandler"
-        @error="errorHandler" -->
-    <iframe v-if="prvFile && prvFile !== ''" style="width: 300px; height: 300px" :src="prvFile"
-        frameborder="0"></iframe>
-    <el-image src="@/assets/images/飘.png" fit="fill" :lazy="true"></el-image>
-    <p>深拷贝 structuredClone{{ obj32.name }}</p>
-    <button @click="() => obj2.name = '李四'">点击</button>
-    <div class="heder">
-
-        <comPone ref="defineExposeTest" title="传值">
-            <h4>插槽</h4>
+    <!-- 组件测试模块 -->
+    <div class="component-section">
+        <comPone ref="defineExposeTest" title="组件测试">
+            <h4>插槽内容</h4>
             <template v-slot:header>
                 <h3>具名插槽</h3>
             </template>
             <template v-slot:data="res">
-                作用域
-                {{ res.data[0] }}
+                作用域插槽数据: {{ res.data[0] }}
             </template>
-            <!-- <h4>插槽</h4> -->
         </comPone>
     </div>
-    <RouterLink to="/progressBar">跳转圆形进度条</RouterLink>
-    <div class="c-#0284c7">unoCSS使用</div>
-    <ul>
-        <li v-for="(item, index) in lists">
-            <input type="checkbox" :value="item.text" />
-            {{ item.text }}
-        </li>
-    </ul>
-    <button @click="remove">删除</button>
-    <video-player id="playerId" class="vjs-custom-skin" :options="playerOptions" />
-    <!-- https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4 -->
 
-    <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
-        style="width: 240px" :props="{ value: 'label', label: 'label' }" node-key="value" @node-click="cli()" />
-    <el-button type="success" @click="down">下载</el-button>
-
-    <a-button type="dashed">aaa</a-button>
-    <el-button type="info">ddd</el-button>
-    <button @click="rout">编程式路由 query</button>
-    <button @click="routP">编程式路由 params</button>
-    <button @click="routT">跳转测试</button>
-    <button @click="() => router.push('/luckyDraw')">抽奖</button>
-    <RouterLink style="text-decoration: none" to="/n" class="flex">点击跳转</RouterLink>
-    <button @click="routC">1241234141</button>
-    <p>vue3</p>
-    <p>{{ num }}</p>
-    <p>{{ com }}</p>
-
-    <van-calendar title="日历" :poppable="false" :show-confirm="false" :lazy-render="false"
-        :style="{ width: '100vw', height: '100vh' }" />
-
-    <el-carousel :interval="4000" type="card" height="400px">
-        <el-carousel-item v-for="(item, index) in 4" :key="item">
-            <!-- <h3 text="2xl" justify="center">{{ item }}</h3> -->
-            <img v-if="index == 0" style="width: 100%" src="https://bing.img.run/uhd.php" alt="" srcset="" />
-            <img v-if="index == 2" style="width: 100%" src="https://api.dujin.org/pic/ghibli/qyqx" alt="" srcset="" />
-            <img v-if="index == 1" style="width: 100%" src="https://bing.img.run/rand_uhd.php" alt="" srcset="" />
-            <img v-if="index == 3" style="width: 100%" src="https://api.dujin.org/pic/ghibli" alt="" srcset="" />
-        </el-carousel-item>
-    </el-carousel>
-
-    <div class="testP">粘性布局测试</div>
-    <div class="test">
-        <p>test</p>
-        <p>2</p>
-        <p>1</p>
-        <p>test</p>
-        <p>1</p>
-        <p>1</p>
-        <p>22仓库的冲突代码</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>12121</p>
-        <p>1</p>
-        <p>1</p>
-        <p>2</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
-        <p>1</p>
+    <!-- 路由导航模块 -->
+    <div class="navigation-section">
+        <RouterLink to="/progressBar">圆形进度条</RouterLink>
+        <button @click="rout">query路由</button>
+        <button @click="routP">params路由</button>
+        <button @click="() => router.push('/luckyDraw')">抽奖</button>
     </div>
 
-    <div class="header">这是固定的标题</div>
-    <div class="container">
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
-        <p>2</p>
+    <!-- 列表操作模块 -->
+    <div class="list-section">
+        <ul>
+            <li v-for="(item, index) in lists">
+                <input type="checkbox" :value="item.text" />
+                {{ item.text }}
+            </li>
+        </ul>
+        <button @click="remove">删除第一项</button>
     </div>
 
-    <div class="img-box">
-        <template v-for="item in 200">
-            <img class="img-item" data-src="https://bing.img.run/rand.php" src="" alt="">
-        </template>
+    <!-- 视频播放模块 -->
+    <div class="media-section">
+        <video-player id="playerId" class="vjs-custom-skin" :options="playerOptions" />
+    </div>
+
+    <!-- 树形选择模块 -->
+    <div class="tree-section">
+        <el-tree-select ref="elTree" v-model="value" :data="data" check-strictly :render-after-expand="false"
+            style="width: 240px" :props="{ value: 'label', label: 'label' }" node-key="value" @node-click="cli" />
+        <el-button type="success" @click="down">下载测试</el-button>
+    </div>
+
+    <!-- 轮播图模块 -->
+    <div class="carousel-section">
+        <el-carousel :interval="4000" type="card" height="400px">
+            <el-carousel-item v-for="(item, index) in 4" :key="item">
+                <img v-if="index == 0" style="width: 100%" src="https://bing.img.run/uhd.php" alt="Bing图片1" />
+                <img v-if="index == 1" style="width: 100%" src="https://bing.img.run/rand_uhd.php" alt="Bing随机图片" />
+                <img v-if="index == 2" style="width: 100%" src="https://api.dujin.org/pic/ghibli/qyqx" alt="吉卜力图片1" />
+                <img v-if="index == 3" style="width: 100%" src="https://api.dujin.org/pic/ghibli" alt="吉卜力图片2" />
+            </el-carousel-item>
+        </el-carousel>
+    </div>
+
+    <!-- 布局测试模块 -->
+    <div class="layout-section">
+        <div class="testP">粘性布局测试</div>
+        <div class="header">固定标题</div>
+        <div class="container">
+            <p v-for="i in 28" :key="i">测试内容 {{ i }}</p>
+        </div>
+    </div>
+
+    <!-- 图片懒加载模块 -->
+    <div class="lazy-load-section">
+        <div class="img-box">
+            <template v-for="item in 20">
+                <img class="img-item" data-src="https://bing.img.run/rand.php" src="" :alt="'图片' + item">
+            </template>
+        </div>
     </div>
 </template>
 
 <script setup>
-import {
-    onMounted,
-    defineComponent,
-    reactive,
-    toRefs,
-    watch,
-    ref,
-    onBeforeUnmount,
-    getCurrentInstance,
-} from "vue"
-import { RouterLink, useRouter } from "vue-router"
-import { image } from "../api/api/image.js"
-// pinia选项式写法
+import { onMounted, ref, reactive, getCurrentInstance } from "vue"
+import { useRouter } from "vue-router"
 import { PiniaTest } from "../stores/PiniaTest"
-// pinia组合式写法
 import { useCounterStore } from "../stores/counter.js"
 import { storeToRefs } from "pinia"
 import videojs from "video.js"
@@ -156,136 +101,37 @@ import comPone from "../components/defineExpose.vue"
 import { ElMessage } from "element-plus"
 import VueOfficeDocx from "@vue-office/docx"
 import Vconsole from "vconsole"
-import { theme } from "ant-design-vue"
+
+// 开发环境启用vConsole
 if (process.env.NODE_ENV == "development") {
-    let vConsole = new Vconsole()
-}
-// 主题色切换
-let isFFF = ref(false)
-let pureColor = ref(null)
-let router = useRouter()
-let a = { name: "张三" }
-let obj = { a }
-let obj1 = { a: { name: "张三" } }
-let obj3 = {}
-let obj2 = reactive({ name: "张三" })
-let obj32 = reactive({})
-const playerOptions = ref({
-    playbackRates: [0.5, 1.0, 2.0], // 可选的播放速度
-    autoplay: true, // 如果为true,浏览器准备好时开始回放。
-    muted: true, // 默认情况下将会消除任何音频。
-    loop: false, // 是否视频一结束就重新开始。
-    controls: true, // 是否显示默认控件，比如播放/暂停按钮
-    preload: "auto", // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-    language: "zh-CN",
-    aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-    fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-    sources: [
-        {
-            type: "video/webm", // 类型
-            src: "https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4", // url地址，若为后端返回，需为文件流
-        },
-    ],
-    poster: "", // 封面地址,不设置会默认第一帧为封面
-    notSupportedMessage: "此视频暂无法播放，请稍后再试", // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
-    controlBar: {
-        timeDivider: true, // 当前时间和持续时间的分隔符
-        durationDisplay: true, // 显示持续时间
-        remainingTimeDisplay: true, // 是否显示剩余时间功能
-        fullscreenToggle: true, // 是否显示全屏按钮
-    },
-})
-obj3.self = "a"
-
-const modules = import.meta.glob("@/views/**/*.vue")
-
-// pinia选项式写法
-let Store = PiniaTest()
-
-// pinia组合式写法
-let { count, doubleCount } = storeToRefs(useCounterStore())
-let testFn = () => {
-    let store = useCounterStore()
-    store.increment()
+    new Vconsole()
 }
 
-testFn()
+// ========== 主题相关 ==========
+const pureColor = ref(null)
+const Store = PiniaTest()
 
-for (var i = 0; i < 5; i++) {
-    setTimeout(function () {
-    }, 1000)
-}
+// ========== Pinia状态 ==========
+const { count } = storeToRefs(useCounterStore())
 
-const routC = () => {
-    router.replace("/n")
-}
+// ========== 路由相关 ==========
+const router = useRouter()
 
-let test = getCurrentInstance().appContext.config.globalProperties
+// ========== 文件操作相关 ==========
+const prvFile = ref(null)
+const filesContent = ref("")
 
-let defineExposeTest = ref()
-
-let prvFile = ref(null)
-
-let filesContent = ref("")
-let fileChange = (e) => {
-    prvFile.value = false
-    let file = e.target.files[0]
-
-    let type = file.type
-    // type.includes('image')|| type.includes('video')
-
-    let axiosArray = []
-    let chunkList = []
-    let chunkSize = file.size / 6
-    let current = 0
-    let i = 0
-    let fileName = new Date().getTime() + "_" + file.name
-    while (current < 6) {
-        chunkList.push({
-            chunk: file.slice(current * chunkSize, (current + 1) * chunkSize),
-            fileName: current + "_" + fileName,
-        })
-        current++
-    }
-    let conFile = []
-    chunkList.forEach((item) => {
-        conFile.push(item.chunk)
-    })
-    const blob = new Blob(conFile, {
-        type,
-    })
-    let blodUrl = window.URL.createObjectURL(blob)
-    setTimeout(() => {
-        prvFile.value = ""
-    }, 2000)
-
-    setTimeout(() => {
-        prvFile.value = blodUrl
-    }, 4000)
-
-    if (type !== "" && type) {
-        var url = window.URL.createObjectURL(file)
-        prvFile.value = url
-    } else {
-        ElMessage({
-            message: "Warning, this is a warning message.",
-            type: "warning",
-        })
-    }
-}
-function title() {
-    if (defineExposeTest.value) {
-    }
-}
-
-const value = ref(null)
-let lists = reactive([
+// ========== 列表操作相关 ==========
+const lists = reactive([
     { id: 1, text: "张" },
     { id: 2, text: "吕" },
     { id: 3, text: "王" },
 ])
 
-const data = reactive([
+// ========== 树形选择相关 ==========
+const value = ref(null)
+const elTree = ref()
+const data = [
     {
         value: "1",
         label: "Level one 1",
@@ -354,14 +200,41 @@ const data = reactive([
             },
         ],
     },
-])
-let elTree = ref()
+]
+
+// ========== 视频播放器配置 ==========
+const playerOptions = ref({
+    playbackRates: [0.5, 1.0, 2.0],
+    autoplay: true,
+    muted: true,
+    loop: false,
+    controls: true,
+    preload: "auto",
+    language: "zh-CN",
+    aspectRatio: "16:9",
+    fluid: true,
+    sources: [
+        {
+            type: "video/webm",
+            src: "https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4",
+        },
+    ],
+    poster: "",
+    notSupportedMessage: "此视频暂无法播放，请稍后再试",
+    controlBar: {
+        timeDivider: true,
+        durationDisplay: true,
+        remainingTimeDisplay: true,
+        fullscreenToggle: true,
+    },
+})
+// ========== 文件操作相关方法 ==========
+const defineExposeTest = ref()
 
 /**
- * @description: 选择文件夹
- * @return {*}
+ * 选择文件夹并读取内容
  */
-let choseFiles = async () => {
+const choseFiles = async () => {
     if (!window.showDirectoryPicker) {
         ElMessage({
             message: "当前浏览器不支持目录选择功能",
@@ -371,7 +244,7 @@ let choseFiles = async () => {
     }
 
     try {
-        let handle = await showDirectoryPicker();
+        const handle = await showDirectoryPicker();
         await openFiles(handle);
 
         let fileHandle = null;
@@ -390,7 +263,7 @@ let choseFiles = async () => {
             return;
         }
 
-        let file = await fileHandle.getFile();
+        const file = await fileHandle.getFile();
 
         if (!file.type.startsWith("text/")) {
             ElMessage({
@@ -400,7 +273,7 @@ let choseFiles = async () => {
             return;
         }
 
-        let reader = new FileReader();
+        const reader = new FileReader();
         reader.readAsText(file);
 
         reader.onload = (e) => {
@@ -421,152 +294,136 @@ let choseFiles = async () => {
         });
     }
 };
-let openFiles = async (filePaths) => {
-    if (!filePaths.kind || filePaths.kind === "file") {
-        return
-    }
-    // entries: 异步迭代器，用于遍历目录下的所有文件
-    let entries = await filePaths.values()
-    filePaths.children = []
-    for await (const entry of entries) {
-        filePaths.children.push(entry)
-        await openFiles(entry)
-    }
-}
-let remove = () => {
-    //注意这里是shift
-    lists.shift()
-}
+
 /**
- * @description: 获取组件的值
- * @return {*}
+ * 递归打开文件夹
  */
-let cli = () => {
-    // 延迟100毫秒执行以下操作，以确保DOM操作或异步操作的完成
-    setTimeout(() => {
-        // 获取当前树组件选中项的唯一键值
-        let data = elTree.value.getCurrentKey()
-        // 打印选中项的名称和ID
-    }, 100)
-}
-
-let imageUrl = ref("")
-
-const changeTheme = () => {
-    document.documentElement.style.setProperty("--theme-color", pureColor.value)
-    Store.themeColor = pureColor.value
-    return
-    // 获取dom节点
-    let rootDom = document.documentElement
-    // 获取当前主体颜色
-    let theme = rootDom.style.getPropertyValue('--theme-color')
-    // 根据颜色设置不同值
-    if (isFFF.value) {
-        rootDom.style.setProperty('--theme-color', '#36d')
-    } else {
-        rootDom.style.setProperty('--theme-color', '#fff')
+const openFiles = async (filePaths) => {
+    if (!filePaths.kind || filePaths.kind === "file") {
+        return;
     }
-    Store.themeColor = rootDom.style.getPropertyValue('--theme-color')
-}
+
+    const entries = await filePaths.values();
+    filePaths.children = [];
+
+    for await (const entry of entries) {
+        filePaths.children.push(entry);
+        await openFiles(entry);
+    }
+};
+
+// ========== 列表操作相关方法 ==========
+/**
+ * 删除列表第一项
+ */
+const remove = () => {
+    lists.shift();
+};
+
+// ========== 树形选择相关方法 ==========
+/**
+ * 树节点点击事件
+ */
+const cli = () => {
+    setTimeout(() => {
+        const data = elTree.value.getCurrentKey();
+    }, 100);
+};
+
+// ========== 主题相关方法 ==========
+/**
+ * 切换主题颜色
+ */
+const changeTheme = () => {
+    document.documentElement.style.setProperty("--theme-color", pureColor.value);
+    Store.themeColor = pureColor.value;
+};
+
+// ========== 生命周期钩子 ==========
+const test = getCurrentInstance().appContext.config.globalProperties
 
 onMounted(async () => {
-    initObserver()
-    pureColor.value = Store.themeColor
+    initObserver();
+    pureColor.value = Store.themeColor;
 
-    title()
-    // imageUrl.value = await image();
-    let option = {
+    // 初始化视频播放器
+    const player = videojs("playerId", {
         controls: true,
-        preload: "auto", // 预加载
-        autoplay: false, // 是否自动播放
-        fluid: false, // 自适应宽高
+        preload: "auto",
+        autoplay: false,
+        fluid: false,
         height: 200,
         width: 300,
-    }
-    const player = videojs("playerId", option)
-    // player.src("https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4")
-    player.on("ended", () => {
-        //播放完成
-    })
-    player.on("play", (e) => {
-    })
+    });
 
-    let index = 1
-    setInterval(() => {
-        localStorage.setItem("index", (index += 1))
-    }, 1000)
-    getData()
-})
+    // 测试数据请求
+    getData();
+});
 
-/**图片懒加载 */
+/**
+ * 图片懒加载初始化
+ */
 const initObserver = () => {
-    const dom = document.querySelectorAll(".img-item")
+    const dom = document.querySelectorAll(".img-item");
     const Observer = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                // entry.target.style.color = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`
-                const img = entry.target
-                img.src = img.dataset.src
-                // 取消监听
-                observer.unobserve(entry.target)
+                const img = entry.target;
+                img.src = img.dataset.src;
+                observer.unobserve(entry.target);
             }
-        })
-    })
-    dom.forEach(item => {
-        Observer.observe(item)
-    })
-}
-/**
- * @description: 全局挂载request测试
- * @return {*}
- */
-let getData = async () => {
-    test.$test({
-        // url: "https://api.paugram.com/wallpaper/",
-        url: "https://v1.hitokoto.cn/",
-        method: "get",
-    })
-        .then((res) => {
-        console.log("🟣 res -530", "👉", res)
-        })
-        .catch((err) => {
-        })
-}
-
-onBeforeUnmount(() => {
-})
-
-let rout = () => {
-    // 路径
-    router.push({ path: "/r", query: { a: 2 }, params: { text: "这是路径跳转的参数" } })
-}
-
-let routT = () => {
-    router.push({ path: "/t" })
-}
-
-let routP = () => {
-    // 名称
-    router.push({ name: "rou", params: { text: "name传参" } })
-}
+        });
+    });
+    dom.forEach(item => Observer.observe(item));
+};
 
 /**
- * @description: 手动创建下载文件
- * @return {*}
+ * 测试API请求
  */
-let down = () => {
-    const a = document.createElement("a")
+const getData = async () => {
+    try {
+        const res = await test.$test({
+            url: "https://v1.hitokoto.cn/",
+            method: "get",
+        });
+        console.log("API响应:", res);
+    } catch (err) {
+        console.error("API请求失败:", err);
+    }
+};
 
-    a.style.display = "none"
-    // const url = window.URL.create0bjectURL('https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip');
-    a.href = "https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip"
-    a.download = "测试223.zip"
-    // document.body.appendchild(a)
-    a.click()
-    //监听下载完成事件
-    // window.URL.revokeobjectURL(url)
-    // document.body.removechild(a)
-}
+// ========== 路由相关方法 ==========
+/**
+ * 使用query参数跳转路由
+ */
+const rout = () => {
+    router.push({
+        path: "/r",
+        query: { a: 2 },
+        params: { text: "这是路径跳转的参数" }
+    });
+};
+
+/**
+ * 使用params参数跳转路由
+ */
+const routP = () => {
+    router.push({
+        name: "rou",
+        params: { text: "name传参" }
+    });
+};
+
+/**
+ * 下载文件
+ */
+const down = () => {
+    const link = document.createElement("a");
+    link.style.display = "none";
+    link.href = "https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip";
+    link.download = "测试223.zip";
+    link.click();
+};
 </script>
 
 <style lang="scss" scoped>
