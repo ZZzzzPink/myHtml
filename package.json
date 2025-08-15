@@ -27,6 +27,7 @@
     "weixin-js-sdk": "^1.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.54.1",
     "@types/video.js": "^7.3.58",
     "@vitejs/plugin-vue": "^4.2.3",
     "sass": "^1.77.8",
