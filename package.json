@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@galacean/effects": "^2.5.6",
     "@vue-office/docx": "^1.6.2",
     "ant-design-vue": "^4.0.0",
     "axios": "^1.4.0",

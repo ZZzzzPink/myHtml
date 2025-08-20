@@ -35,10 +35,15 @@ const router = createRouter({
             component: () => import("../views/lucky-canvas.vue"),
         },
         {
-            path:'/webView',
-            name: 'webView',
-            component: () => import('../views/webView.vue')
-        }
+            path: "/webView",
+            name: "webView",
+            component: () => import("../views/webView.vue"),
+        },
+        {
+            path: "/animation",
+            name: "animation",
+            component: () => import("@/views/GalaceanEffectsDemo.vue")
+        },
     ],
 })
 
