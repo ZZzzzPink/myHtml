@@ -404,6 +404,10 @@ div {
     line-height: 72px;
     position: sticky;
     top: 0px;
+    background-color: gray;
+    line-height: 72px;
+    position: sticky;
+    top: 0px;
 }
 
 .header {
@@ -422,9 +426,19 @@ div {
     font-size: 24px;
     line-height: 48px;
     white-space: pre;
+    background-color: gray;
+    color: white;
+    font-size: 24px;
+    line-height: 48px;
+    white-space: pre;
 }
 
 .el-carousel__item h3 {
+    color: #475669;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+    text-align: center;
     color: #475669;
     opacity: 0.75;
     line-height: 200px;
@@ -434,9 +448,11 @@ div {
 
 .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;
+    background-color: #99a9bf;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
+    background-color: #d3dce6;
     background-color: #d3dce6;
 }
 
