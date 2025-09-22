@@ -1,4 +1,5 @@
 <template>
+    <el-button @click="$router.push('/vueUse')">vueUes</el-button>
     <!-- 主题切换模块 -->
     <div class="theme-section">
         <color-picker v-model:pureColor="pureColor" @pureColorChange="handleThemeChange" />

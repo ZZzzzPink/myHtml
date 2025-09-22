@@ -38,6 +38,11 @@ const router = createRouter({
             path:'/webView',
             name: 'webView',
             component: () => import('../views/webView.vue')
+        },
+        {
+            path:'/vueUse',
+            name: 'vueUse',
+            component: () => import('../views/vueUse.vue')
         }
     ],
 })
