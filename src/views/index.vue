@@ -3,7 +3,7 @@
     <!-- 主题切换模块 -->
     <div class="theme-section">
         <color-picker v-model:pureColor="pureColor" @pureColorChange="handleThemeChange" />
-        <p>当前计数: {{ count }}</p>
+        <p>当前计数: {{ count }} </p>
     </div>
 
     <!-- 文件操作模块 -->
