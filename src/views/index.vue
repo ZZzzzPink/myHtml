@@ -2,7 +2,7 @@
     <!-- 主题切换模块 -->
     <div class="theme-section">
         <color-picker v-model:pureColor="pureColor" @pureColorChange="handleThemeChange" />
-        <p>当前计数: {{ count }}</p>
+        <p>当前计数: {{ count }} </p>
     </div>
 
     <el-button type="primary" size="default" @click="$router.push('/animation')">动画测试</el-button>
