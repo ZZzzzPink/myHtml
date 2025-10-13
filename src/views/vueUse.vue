@@ -77,7 +77,7 @@
                 <pre v-if="!permissionGranted"
                     lang="json">{{ { acceleration, accelerationIncludingGravity, rotationRate, interval } }}</pre>
                 <div v-else>
-                    Permission is required
+                    Permission is required 
                 </div>
                 <button v-if="!permissionGranted" @click="ensurePermissions">
                     请求权限
