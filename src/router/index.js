@@ -43,6 +43,11 @@ const router = createRouter({
             path:'/vueUse',
             name: 'vueUse',
             component: () => import('../views/vueUse.vue')
+        },
+        {
+            path: '/videoRecorder',
+            name: 'videoRecorder',
+            component: () => import('../views/VideoRecorder.vue')
         }
     ],
 })

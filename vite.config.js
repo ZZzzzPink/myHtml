@@ -13,7 +13,7 @@ export default defineConfig({
     },
     server: {
         open: true,
-        port: 8088,
+        port: 8086,
         host: true,
     },
     publicPath: "./",
