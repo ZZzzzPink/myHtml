@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@pixelium/web-vue": "^0.0.2-fix",
     "@vue-office/docx": "^1.6.2",
     "@vueuse/core": "^13.9.0",
     "ant-design-vue": "^4.0.0",

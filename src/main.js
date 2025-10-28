@@ -18,6 +18,11 @@ import "element-plus/dist/index.css"
 import Vant from "vant"
 import "vant/lib/index.css"
 
+import Pixelium from '@pixelium/web-vue'
+import '@pixelium/web-vue/dist/pixelium-vue.css'
+// Import the font
+import '@pixelium/web-vue/dist/font.css'
+
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 
@@ -39,6 +44,7 @@ app.use(Vant)
 app.use(VueVideoPlayer)
 app.use(ElementPlus)
 app.use(Antd)
+app.use(Pixelium)
 app.use(pinia)
 app.use(Vue3ColorPicker)
 app.use(router)

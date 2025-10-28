@@ -1,4 +1,12 @@
 <template>
+    <px-space>
+		<px-button>Primary</px-button>
+		<px-button theme="success">Success Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+		<px-button theme="warning">Warning Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+		<px-button theme="danger">Danger Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+		<px-button theme="info">Info Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+		<px-button theme="sakura">Sakura</px-button>
+	</px-space>
     <el-button @click="$router.push('/vueUse')">vueUes</el-button>
     <el-button @click="$router.push('/videoRecorder')" type="success">视频录制</el-button>
     <!-- 主题切换模块 -->
