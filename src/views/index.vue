@@ -1,12 +1,15 @@
 <template>
+    <video style="height: 300px;width: 300px;background-color: #fff;" controls playsinline
+        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4"></video>
+
     <px-space>
-		<px-button>Primary</px-button>
-		<px-button theme="success">Success Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
-		<px-button theme="warning">Warning Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
-		<px-button theme="danger">Danger Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
-		<px-button theme="info">Info Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
-		<px-button theme="sakura">Sakura</px-button>
-	</px-space>
+        <px-button>Primary</px-button>
+        <px-button theme="success">Success Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+        <px-button theme="warning">Warning Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+        <px-button theme="danger">Danger Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+        <px-button theme="info">Info Pixelium Design – 基于 Vue 的像素风 UI 组件库</px-button>
+        <px-button theme="sakura">Sakura</px-button>
+    </px-space>
     <el-button @click="$router.push('/vueUse')">vueUes</el-button>
     <el-button @click="$router.push('/videoRecorder')" type="success">视频录制</el-button>
     <!-- 主题切换模块 -->
@@ -209,7 +212,7 @@ const data = [
 
 const playerOptions = ref({
     playbackRates: [0.5, 1.0, 2.0],
-    autoplay: true,
+    autoplay: false,
     muted: true,
     loop: false,
     controls: true,
