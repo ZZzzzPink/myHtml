@@ -8,12 +8,7 @@
         <div class="recorder-content">
             <!-- 设备提示 -->
             <div class="device-tip" v-if="isMobile">
-                <el-alert
-                    title="移动设备录制"
-                    type="info"
-                    :closable="false"
-                    show-icon
-                >
+                <el-alert title="移动设备录制" type="info" :closable="false" show-icon>
                     <template #default>
                         移动设备将使用摄像头进行录制
                     </template>
@@ -22,23 +17,11 @@
 
             <!-- 视频预览区域 -->
             <div class="video-preview">
-                <video 
-                    ref="videoPreview" 
-                    class="preview-video" 
-                    autoplay 
-                    muted
-                    playsinline
-                    v-show="stream && !recordedVideo"
-                ></video>
-                
-                <video 
-                    ref="recordedVideoPlayer" 
-                    class="preview-video" 
-                    controls
-                    playsinline
-                    v-show="recordedVideo"
-                    :src="recordedVideo"
-                ></video>
+                <video ref="videoPreview" class="preview-video" autoplay muted playsinline
+                    v-show="stream && !recordedVideo"></video>
+
+                <video ref="recordedVideoPlayer" class="preview-video" controls playsinline v-show="recordedVideo"
+                    :src="recordedVideo"></video>
 
                 <div v-if="!stream && !recordedVideo" class="no-screen">
                     <el-icon :size="64">
@@ -52,49 +35,42 @@
 
             <!-- 录制信息显示 -->
             <div class="record-info" v-if="isRecording">
-                <el-icon class="recording-icon"><VideoCameraFilled /></el-icon>
+                <el-icon class="recording-icon">
+                    <VideoCameraFilled />
+                </el-icon>
                 <span class="recording-text">录制中...</span>
                 <span class="record-time">{{ formatTime(recordingTime) }}</span>
             </div>
 
             <!-- 控制按钮组 -->
             <div class="controls">
-                <el-button 
-                    v-if="!stream && !recordedVideo" 
-                    type="danger" 
-                    size="large"
-                    @click="startRecording"
-                >
-                    <el-icon><VideoCameraFilled /></el-icon>
+                <el-button v-if="!stream && !recordedVideo" type="danger" size="large" @click="startRecording">
+                    <el-icon>
+                        <VideoCameraFilled />
+                    </el-icon>
                     开始录制
                 </el-button>
 
                 <template v-if="isRecording">
-                    <el-button 
-                        type="warning" 
-                        size="large"
-                        @click="stopRecording"
-                    >
-                        <el-icon><VideoPause /></el-icon>
+                    <el-button type="warning" size="large" @click="stopRecording">
+                        <el-icon>
+                            <VideoPause />
+                        </el-icon>
                         停止录制
                     </el-button>
                 </template>
 
                 <template v-if="recordedVideo">
-                    <el-button 
-                        type="success" 
-                        size="large"
-                        @click="downloadVideo"
-                    >
-                        <el-icon><Download /></el-icon>
+                    <el-button type="success" size="large" @click="downloadVideo">
+                        <el-icon>
+                            <Download />
+                        </el-icon>
                         下载视频
                     </el-button>
-                    <el-button 
-                        type="primary" 
-                        size="large"
-                        @click="reRecord"
-                    >
-                        <el-icon><RefreshRight /></el-icon>
+                    <el-button type="primary" size="large" @click="reRecord">
+                        <el-icon>
+                            <RefreshRight />
+                        </el-icon>
                         重新录制
                     </el-button>
                 </template>
@@ -108,7 +84,7 @@
                             <span>录制选项</span>
                         </div>
                     </template>
-                    
+
                     <!-- PC端选项 -->
                     <template v-if="!isMobile">
                         <div class="setting-item">
@@ -133,7 +109,7 @@
                             <el-switch v-model="audioEnabled"></el-switch>
                         </div>
                     </template>
-                    
+
                     <!-- 移动端选项 -->
                     <template v-else>
                         <div class="setting-item">
@@ -203,8 +179,8 @@ const cameraFacing = ref('user')
 const checkMobileDevice = () => {
     const userAgent = navigator.userAgent.toLowerCase()
     const mobileKeywords = ['android', 'iphone', 'ipad', 'ipod', 'windows phone', 'mobile']
-    isMobile.value = mobileKeywords.some(keyword => userAgent.includes(keyword)) || 
-                     window.innerWidth <= 768
+    isMobile.value = mobileKeywords.some(keyword => userAgent.includes(keyword)) ||
+        window.innerWidth <= 768
 }
 
 onMounted(() => {
@@ -247,7 +223,7 @@ const startScreenRecording = async () => {
         }
 
         stream.value = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions)
-        
+
         if (videoPreview.value) {
             videoPreview.value.srcObject = stream.value
         }
@@ -282,7 +258,7 @@ const startCameraRecording = async () => {
         }
 
         stream.value = await navigator.mediaDevices.getUserMedia(constraints)
-        
+
         if (videoPreview.value) {
             videoPreview.value.srcObject = stream.value
         }
@@ -311,8 +287,8 @@ const startMediaRecorder = () => {
         const options = {
             mimeType: 'video/webm;codecs=vp9',
             videoBitsPerSecond: parseInt(videoQuality.value) === 1440 ? 8000000 :
-                              parseInt(videoQuality.value) === 1080 ? 5000000 : 
-                              parseInt(videoQuality.value) === 720 ? 2500000 : 1000000
+                parseInt(videoQuality.value) === 1080 ? 5000000 :
+                    parseInt(videoQuality.value) === 720 ? 2500000 : 1000000
         }
 
         // 检查浏览器支持的 MIME 类型
@@ -326,25 +302,25 @@ const startMediaRecorder = () => {
 
         recordedChunks.value = []
         mediaRecorder.value = new MediaRecorder(stream.value, options)
-        
+
         mediaRecorder.value.ondataavailable = (event) => {
             if (event.data.size > 0) {
                 recordedChunks.value.push(event.data)
             }
         }
-        
+
         mediaRecorder.value.onstop = () => {
             const mimeType = mediaRecorder.value.mimeType || 'video/webm'
             const blob = new Blob(recordedChunks.value, { type: mimeType })
             recordedVideo.value = URL.createObjectURL(blob)
-            
+
             stopStream()
         }
-        
+
         mediaRecorder.value.start(100)
         isRecording.value = true
         recordingTime.value = 0
-        
+
         recordingTimer = setInterval(() => {
             recordingTime.value++
         }, 1000)
@@ -379,12 +355,12 @@ const stopRecording = () => {
     if (mediaRecorder.value && isRecording.value) {
         mediaRecorder.value.stop()
         isRecording.value = false
-        
+
         if (recordingTimer) {
             clearInterval(recordingTimer)
             recordingTimer = null
         }
-        
+
         ElMessage.success('录制已停止')
     }
 }
@@ -418,7 +394,7 @@ const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600)
     const mins = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
-    
+
     return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
 }
 
@@ -445,7 +421,7 @@ onBeforeUnmount(() => {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 30px;
-    
+
     h1 {
         color: white;
         font-size: 32px;
@@ -464,7 +440,7 @@ onBeforeUnmount(() => {
 
 .canvas-container {
     display: none;
-    
+
     .record-canvas {
         width: 100%;
         border-radius: 12px;
@@ -481,14 +457,14 @@ onBeforeUnmount(() => {
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    
+
     .preview-video {
         width: 100%;
         display: block;
         min-height: 500px;
         object-fit: contain;
     }
-    
+
     .no-screen {
         display: flex;
         flex-direction: column;
@@ -496,7 +472,7 @@ onBeforeUnmount(() => {
         justify-content: center;
         min-height: 500px;
         color: #666;
-        
+
         p {
             margin-top: 20px;
             font-size: 18px;
@@ -517,19 +493,19 @@ onBeforeUnmount(() => {
     border-radius: 8px;
     max-width: 350px;
     margin: 0 auto 30px;
-    
+
     .recording-icon {
         color: #f56c6c;
         font-size: 24px;
         animation: pulse 1.5s ease-in-out infinite;
     }
-    
+
     .recording-text {
         font-size: 18px;
         font-weight: bold;
         color: #f56c6c;
     }
-    
+
     .record-time {
         font-size: 20px;
         font-weight: bold;
@@ -539,10 +515,13 @@ onBeforeUnmount(() => {
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
         transform: scale(1);
     }
+
     50% {
         opacity: 0.6;
         transform: scale(1.1);
@@ -560,25 +539,25 @@ onBeforeUnmount(() => {
 .settings {
     max-width: 500px;
     margin: 0 auto;
-    
+
     .settings-card {
         background: rgba(255, 255, 255, 0.95);
-        
+
         .card-header {
             font-weight: bold;
             font-size: 16px;
         }
-        
+
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 0;
-            
+
             &:not(:last-child) {
                 border-bottom: 1px solid #eee;
             }
-            
+
             span {
                 font-size: 14px;
                 color: #606266;
@@ -592,7 +571,7 @@ onBeforeUnmount(() => {
     .header {
         flex-direction: column;
         gap: 15px;
-        
+
         h1 {
             font-size: 24px;
         }
@@ -602,19 +581,19 @@ onBeforeUnmount(() => {
         .preview-video {
             min-height: 300px;
         }
-        
+
         .no-screen {
             min-height: 300px;
-            
+
             p {
                 font-size: 16px;
             }
         }
     }
-    
+
     .controls {
         flex-direction: column;
-        
+
         :deep(.el-button) {
             width: 100%;
         }
