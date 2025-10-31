@@ -284,20 +284,43 @@ const startRecording = async () => {
 /** 启动媒体录制器 */
 const startMediaRecorder = () => {
     try {
+        // iOS 设备优先使用 MP4 格式，VP8 兼容性比 VP9 更好
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+        
+        // 优先级列表：MP4 > WebM+VP8 > WebM+VP9
+        let mimeType = ''
+        
+        if (isIOS) {
+            // iOS 优先使用 MP4
+            if (MediaRecorder.isTypeSupported('video/mp4;codecs=h264')) {
+                mimeType = 'video/mp4;codecs=h264'
+            } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+                mimeType = 'video/mp4'
+            } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+                mimeType = 'video/webm;codecs=vp8'
+            } else if (MediaRecorder.isTypeSupported('video/webm')) {
+                mimeType = 'video/webm'
+            }
+        } else {
+            // 非 iOS 设备，优先级：VP8 > VP9 > H264
+            if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+                mimeType = 'video/webm;codecs=vp8'
+            } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                mimeType = 'video/webm;codecs=vp9'
+            } else if (MediaRecorder.isTypeSupported('video/mp4;codecs=h264')) {
+                mimeType = 'video/mp4;codecs=h264'
+            } else if (MediaRecorder.isTypeSupported('video/webm')) {
+                mimeType = 'video/webm'
+            } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+                mimeType = 'video/mp4'
+            }
+        }
+        
         const options = {
-            mimeType: 'video/webm;codecs=vp9',
+            mimeType: mimeType,
             videoBitsPerSecond: parseInt(videoQuality.value) === 1440 ? 8000000 :
                 parseInt(videoQuality.value) === 1080 ? 5000000 :
                     parseInt(videoQuality.value) === 720 ? 2500000 : 1000000
-        }
-
-        // 检查浏览器支持的 MIME 类型
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            if (MediaRecorder.isTypeSupported('video/webm')) {
-                options.mimeType = 'video/webm'
-            } else if (MediaRecorder.isTypeSupported('video/mp4')) {
-                options.mimeType = 'video/mp4'
-            }
         }
 
         recordedChunks.value = []
