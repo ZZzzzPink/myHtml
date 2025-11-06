@@ -53,6 +53,11 @@ const router = createRouter({
             path: '/cameraRecorder',
             name: 'cameraRecorder',
             component: () => import('../views/CameraRecorder.vue')
+        },
+        {
+            path: '/esign',
+            name: 'esign',
+            component: () => import('../views/esign.vue')
         }
     ],
 })

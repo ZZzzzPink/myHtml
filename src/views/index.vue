@@ -1,4 +1,7 @@
 <template>
+    <div class="scr h-10vh overflow-y-scroll overflow-x-hidden" @scroll="onScroll">
+        <div class="h-100vh"></div>
+    </div>
     <video style="height: 300px;width: 300px;background-color: #fff;" controls playsinline
         src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4"></video>
 
@@ -13,6 +16,7 @@
     <el-button @click="$router.push('/vueUse')">vueUes</el-button>
     <el-button @click="$router.push('/videoRecorder')" type="success">屏幕录制</el-button>
     <el-button @click="$router.push('/cameraRecorder')" type="primary">摄像头录制</el-button>
+    <el-button @click="$router.push('/esign')" type="warning">电子签名</el-button>
     <!-- 主题切换模块 -->
     <div class="theme-section">
         <color-picker v-model:pureColor="pureColor" @pureColorChange="handleThemeChange" />
@@ -403,6 +407,10 @@ const handleDownload = () => {
     link.href = 'https://down.vmaxcloud.com.cn/apk/%E6%B5%8B%E8%AF%95223.zip'
     link.download = '测试223.zip'
     link.click()
+}
+const onScroll = (e) => {
+    console.log("🐛 e -412", " 👉", e)
+    
 }
 </script>
 
