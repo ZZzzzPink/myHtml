@@ -17,6 +17,7 @@
     "ant-design-vue": "^4.0.0",
     "axios": "^1.4.0",
     "element-plus": "^2.5.3",
+    "html2canvas": "^1.4.1",
     "pinia": "^2.1.4",
     "pinia-plugin-persist": "^1.0.0",
     "vant": "^4.6.4",
