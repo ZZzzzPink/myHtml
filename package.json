@@ -28,7 +28,9 @@
     "vue-router": "^4.2.4",
     "vue-video-player": "^6.0.0",
     "vue3-colorpicker": "^2.3.0",
-    "weixin-js-sdk": "^1.6.5"
+    "weixin-js-sdk": "^1.6.5",
+    "@galacean/effects": "^2.7.3",
+    "@galacean/effects-plugin-rich-text": "^2.7.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",
