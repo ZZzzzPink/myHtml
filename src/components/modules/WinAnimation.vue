@@ -52,6 +52,5 @@ onMounted(() => {
     z-index: 100;
     top: 0;
     left: 0;
-    pointer-events: auto;
 }
 </style>
