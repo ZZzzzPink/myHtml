@@ -31,8 +31,11 @@ const initPlayer = async () => {
             player.on("click", item => {
                 ElMessage.warning("点击了元素：" + item.name)
             })
-
             console.log('动画播放器初始化成功')
+            let timer = setTimeout(() => {
+                isShowWinAnimate.value = false
+                clearTimeout(timer)
+            }, 2000)
         } catch (error) {
             console.error('动画播放器初始化失败:', error)
         }
