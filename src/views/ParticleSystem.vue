@@ -1,67 +1,89 @@
 <template>
   <div class="particle-container">
-    <canvas ref="canvasRef"></canvas>
+    <canvas ref="canvasRef" v-show="controlMode !== 'draw'"></canvas>
+    <canvas ref="drawCanvasRef" v-if="controlMode === 'draw'" class="draw-canvas"></canvas>
     
-    <div class="control-panel">
-      <div class="panel-header">
-        <h3>✨ 粒子控制台</h3>
-      </div>
-      <div class="control-group">
-        <label>🎨 模型选择</label>
-        <select v-model="selectedModel" @change="changeModel">
-          <option value="heart">❤️ 爱心</option>
-          <option value="flower">🌸 花朵</option>
-          <option value="saturn">🪐 土星</option>
-          <option value="buddha">🧘 佛像</option>
-          <option value="firework">🎆 烟花</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label>🎨 粒子颜色</label>
-        <div class="color-picker-wrapper">
-          <input type="color" v-model="particleColor" @input="updateColor">
-          <span class="color-value">{{ particleColor }}</span>
-        </div>
-      </div>
-      <button @click="toggleFullscreen" class="fullscreen-btn">
-        <span>{{ isFullscreen ? '🔙 退出全屏' : '🖥️ 全屏模式' }}</span>
+    <!-- 简化的顶部控制栏 -->
+    <div class="top-bar">
+      <select v-model="selectedModel" @change="changeModel" class="model-select">
+        <option value="heart">❤️ 爱心</option>
+        <option value="flower">🌸 花朵</option>
+        <option value="saturn">🪐 土星</option>
+        <option value="buddha">🧘 佛像</option>
+        <option value="firework">🎆 烟花</option>
+        <option value="spiral">🌀 螺旋</option>
+        <option value="star">⭐ 星星</option>
+        <option value="cube">🎲 魔方</option>
+        <option value="dna">🧬 DNA</option>
+        <option value="wave">🌊 波浪</option>
+      </select>
+      
+      <button @click="showHelp = !showHelp" class="icon-btn" :class="{ active: showHelp }" title="操作说明">
+        {{ showHelp ? '✕' : '❓' }}
       </button>
-      <div class="control-group">
-        <label>🎮 控制模式</label>
-        <select v-model="controlMode" @change="switchControlMode">
-          <option value="gesture">手势控制</option>
-          <option value="mouse">鼠标控制</option>
-        </select>
-      </div>
-      <div class="status-indicator" :class="{ active: handsDetected }">
-        <span class="dot"></span>
-        {{ controlMode === 'gesture' ? (handsDetected ? '✋ 手势已识别' : '👋 等待手势') : '🖱️ 鼠标控制中' }}
-      </div>
+      
+      <button @click="toggleFullscreen" class="icon-btn" title="全屏">
+        {{ isFullscreen ? '🔙' : '🖥️' }}
+      </button>
+      
+      <select v-model="controlMode" @change="switchControlMode" class="mode-select">
+        <option value="gesture">🤏 手势</option>
+        <option value="draw">✍️ 写字</option>
+        <option value="mouse">🖱️ 鼠标</option>
+      </select>
+      
+      <button v-if="controlMode === 'draw'" @click="clearDrawing" class="icon-btn" title="清空画布">
+        🗑️
+      </button>
     </div>
     
-    <div class="camera-view">
+    <!-- 操作说明面板 -->
+    <transition name="fade">
+      <div v-if="showHelp" class="help-panel">
+        <h3>🎮 操作说明</h3>
+        <div class="help-content">
+          <div class="help-section">
+            <h4>🤏 手势控制</h4>
+            <ul>
+              <li><strong>捏合/张开：</strong>控制粒子缩放</li>
+              <li><strong>旋转手指：</strong>旋转粒子</li>
+            </ul>
+          </div>
+          <div class="help-section">
+            <h4>✍️ 写字模式</h4>
+            <ul>
+              <li><strong>伸出食指：</strong>开始绘制轨迹</li>
+              <li><strong>点击🗑️按钮：</strong>清空画板</li>
+            </ul>
+          </div>
+          <div class="help-section">
+            <h4>🖱️ 鼠标控制</h4>
+            <ul>
+              <li><strong>滚轮滚动：</strong>缩放粒子</li>
+            </ul>
+          </div>
+          <div class="help-section">
+            <h4>� 提示</h4>
+            <ul>
+              <li>保持手距离摄像头30-50cm</li>
+              <li>确保光线充足</li>
+              <li>手掌正面朝向摄像头</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </transition>
+    
+    <!-- 摄像头视图 -->
+    <div class="camera-view" v-if="controlMode !== 'mouse'">
       <div class="camera-header">
-        <span class="camera-title">📹 实时监控</span>
-        <span class="status-badge" :class="{ active: handsDetected }">
-          {{ handsDetected ? 'ACTIVE' : 'STANDBY' }}
-        </span>
+        <span class="status-dot" :class="{ active: handsDetected }"></span>
+        <span class="gesture-text">{{ currentGesture }}</span>
+        <span class="scale-text" v-if="controlMode === 'gesture'">{{ particleScale.toFixed(1) }}x</span>
       </div>
       <div class="video-wrapper">
         <video ref="videoRef" autoplay playsinline></video>
         <canvas ref="handCanvasRef"></canvas>
-      </div>
-      <div class="gesture-info">
-        <div class="info-item">
-          <span class="label">手势距离</span>
-          <span class="value">{{ gestureDistance.toFixed(3) }}</span>
-        </div>
-        <div class="info-item">
-          <span class="label">缩放倍数</span>
-          <span class="value">{{ particleScale.toFixed(2) }}x</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" :style="{ width: `${Math.min(particleScale / 3 * 100, 100)}%` }"></div>
-        </div>
       </div>
     </div>
   </div>
@@ -70,31 +92,55 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import * as THREE from 'three'
-import * as handTrack from 'handtrackjs'
+import { Hands } from '@mediapipe/hands'
+import { Camera } from '@mediapipe/camera_utils'
 
 const canvasRef = ref(null)
 const videoRef = ref(null)
 const handCanvasRef = ref(null)
+const drawCanvasRef = ref(null)
 const selectedModel = ref('heart')
-const particleColor = ref('#ff0066')
 const isFullscreen = ref(false)
-const gestureDistance = ref(0)
 const particleScale = ref(1)
 const handsDetected = ref(false)
-const controlMode = ref('mouse')
+const controlMode = ref('gesture')
+const currentGesture = ref('等待手势')
+const showHelp = ref(false)
 
-let scene, camera, renderer, particles, handModel
-let smoothedDistance = 0
-const smoothingFactor = 0.25
+let scene, camera, renderer, particles, hands, cameraStream
 let mouseScale = 1
-let detectionInterval = null
-let lastHandPositions = []
+let rotationSpeed = 0.002
+let lastPinchDistance = 0
+let lastPinchAngle = 0
+let smoothedRotationSpeed = 0
+const smoothingFactor = 0.3
+const rotationSmoothingFactor = 0.2
+
+let drawingPoints = []
+let drawingParticles = null
+let drawCtx = null
+let lastDrawPoint = null
+let drawThrottle = 0
+const DRAW_THROTTLE_MS = 16
+
+const modelColors = {
+  heart: '#ff1744',
+  flower: '#ff4081',
+  saturn: '#00bcd4',
+  buddha: '#ffd700',
+  firework: '#ff6b35',
+  spiral: '#7c4dff',
+  star: '#ffd700',
+  cube: '#00e676',
+  dna: '#00bfa5',
+  wave: '#2979ff'
+}
 
 const modelShapes = {
   heart: () => {
     const shape = []
-    for (let i = 0; i < 2000; i++) {
-      const t = (i / 2000) * Math.PI * 2
+    for (let i = 0; i < 3000; i++) {
+      const t = (i / 3000) * Math.PI * 2
       const x = 16 * Math.pow(Math.sin(t), 3)
       const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)
       const z = (Math.random() - 0.5) * 5
@@ -104,8 +150,8 @@ const modelShapes = {
   },
   flower: () => {
     const shape = []
-    for (let i = 0; i < 2000; i++) {
-      const t = (i / 2000) * Math.PI * 2
+    for (let i = 0; i < 3000; i++) {
+      const t = (i / 3000) * Math.PI * 2
       const r = 5 * (1 + 0.5 * Math.sin(5 * t))
       const x = r * Math.cos(t)
       const y = r * Math.sin(t)
@@ -137,7 +183,7 @@ const modelShapes = {
   },
   buddha: () => {
     const shape = []
-    for (let i = 0; i < 2000; i++) {
+    for (let i = 0; i < 3000; i++) {
       const phi = Math.acos(2 * Math.random() - 1)
       const theta = Math.random() * Math.PI * 2
       const r = 3 + Math.abs(Math.sin(phi * 3)) * 2
@@ -150,14 +196,95 @@ const modelShapes = {
   },
   firework: () => {
     const shape = []
-    for (let i = 0; i < 2000; i++) {
+    for (let i = 0; i < 3000; i++) {
       const phi = Math.random() * Math.PI * 2
       const theta = Math.random() * Math.PI
-      const r = Math.random() * 8
+      const r = Math.pow(Math.random(), 0.5) * 8
       const x = r * Math.sin(theta) * Math.cos(phi)
       const y = r * Math.sin(theta) * Math.sin(phi)
       const z = r * Math.cos(theta)
       shape.push(new THREE.Vector3(x, y, z))
+    }
+    return shape
+  },
+  spiral: () => {
+    const shape = []
+    for (let i = 0; i < 3000; i++) {
+      const t = (i / 3000) * Math.PI * 8
+      const r = t * 0.5
+      const x = r * Math.cos(t)
+      const y = t * 0.3 - 6
+      const z = r * Math.sin(t)
+      shape.push(new THREE.Vector3(x, y, z))
+    }
+    return shape
+  },
+  star: () => {
+    const shape = []
+    for (let i = 0; i < 3000; i++) {
+      const angle = (i / 3000) * Math.PI * 2
+      const points = 5
+      const outerRadius = 6
+      const innerRadius = 2.5
+      const pointIndex = Math.floor((i / 3000) * points * 2)
+      const isOuter = pointIndex % 2 === 0
+      const r = isOuter ? outerRadius : innerRadius
+      const a = angle * points
+      const x = r * Math.cos(a)
+      const y = r * Math.sin(a)
+      const z = (Math.random() - 0.5) * 2
+      shape.push(new THREE.Vector3(x, y, z))
+    }
+    return shape
+  },
+  cube: () => {
+    const shape = []
+    const size = 5
+    for (let i = 0; i < 3000; i++) {
+      const face = Math.floor(Math.random() * 6)
+      let x, y, z
+      switch(face) {
+        case 0: x = size; y = (Math.random() - 0.5) * size * 2; z = (Math.random() - 0.5) * size * 2; break
+        case 1: x = -size; y = (Math.random() - 0.5) * size * 2; z = (Math.random() - 0.5) * size * 2; break
+        case 2: y = size; x = (Math.random() - 0.5) * size * 2; z = (Math.random() - 0.5) * size * 2; break
+        case 3: y = -size; x = (Math.random() - 0.5) * size * 2; z = (Math.random() - 0.5) * size * 2; break
+        case 4: z = size; x = (Math.random() - 0.5) * size * 2; y = (Math.random() - 0.5) * size * 2; break
+        case 5: z = -size; x = (Math.random() - 0.5) * size * 2; y = (Math.random() - 0.5) * size * 2; break
+      }
+      shape.push(new THREE.Vector3(x, y, z))
+    }
+    return shape
+  },
+  dna: () => {
+    const shape = []
+    for (let i = 0; i < 3000; i++) {
+      const t = (i / 3000) * Math.PI * 10
+      const r = 3
+      const x1 = r * Math.cos(t)
+      const z1 = r * Math.sin(t)
+      const x2 = r * Math.cos(t + Math.PI)
+      const z2 = r * Math.sin(t + Math.PI)
+      const y = (i / 3000) * 20 - 10
+      
+      if (i % 2 === 0) {
+        shape.push(new THREE.Vector3(x1, y, z1))
+      } else {
+        shape.push(new THREE.Vector3(x2, y, z2))
+      }
+    }
+    return shape
+  },
+  wave: () => {
+    const shape = []
+    const gridSize = 50
+    for (let i = 0; i < gridSize; i++) {
+      for (let j = 0; j < gridSize; j++) {
+        const x = (i - gridSize / 2) * 0.5
+        const z = (j - gridSize / 2) * 0.5
+        const dist = Math.sqrt(x * x + z * z)
+        const y = Math.sin(dist * 0.5) * 3
+        shape.push(new THREE.Vector3(x, y, z))
+      }
     }
     return shape
   }
@@ -178,6 +305,7 @@ const initThree = () => {
 
 const createParticles = () => {
   if (particles) scene.remove(particles)
+  if (drawingParticles) scene.remove(drawingParticles)
   
   const positions = modelShapes[selectedModel.value]()
   const geometry = new THREE.BufferGeometry()
@@ -192,10 +320,12 @@ const createParticles = () => {
   geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3))
   
   const material = new THREE.PointsMaterial({
-    color: particleColor.value,
-    size: 0.15,
+    color: modelColors[selectedModel.value],
+    size: 0.2,
     transparent: true,
-    opacity: 0.8
+    opacity: 0.9,
+    sizeAttenuation: true,
+    blending: THREE.AdditiveBlending
   })
   
   particles = new THREE.Points(geometry, material)
@@ -205,8 +335,8 @@ const createParticles = () => {
 const animate = () => {
   requestAnimationFrame(animate)
   
-  if (particles) {
-    particles.rotation.y += 0.002
+  if (particles && controlMode.value !== 'draw') {
+    particles.rotation.y += rotationSpeed
     particles.scale.set(particleScale.value, particleScale.value, particleScale.value)
   }
   
@@ -214,111 +344,199 @@ const animate = () => {
 }
 
 const initHandTracking = async () => {
-  const modelParams = {
-    flipHorizontal: true,
-    maxNumHands: 2,
-    minConfidence: 0.7,
-    scoreThreshold: 0.8
-  }
+  hands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${file}`
+  })
   
-  handModel = await handTrack.load(modelParams)
+  hands.setOptions({
+    maxNumHands: 1,
+    modelComplexity: 1,
+    minDetectionConfidence: 0.7,
+    minTrackingConfidence: 0.7
+  })
   
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      width: 640,
-      height: 480,
-      facingMode: 'user'
-    }
+  hands.onResults(controlMode.value === 'draw' ? onDrawResults : onHandsResults)
+  
+  const stream = await navigator.mediaDevices.getUserMedia({ 
+    video: { width: 640, height: 480 }
   })
   videoRef.value.srcObject = stream
   
-  await new Promise(resolve => {
-    videoRef.value.onloadedmetadata = resolve
+  cameraStream = new Camera(videoRef.value, {
+    onFrame: async () => {
+      await hands.send({ image: videoRef.value })
+    },
+    width: 640,
+    height: 480
   })
-  
-  runDetection()
+  cameraStream.start()
 }
 
-const runDetection = () => {
-  detectionInterval = setInterval(async () => {
-    if (!videoRef.value || !handModel) return
+const onHandsResults = (results) => {
+  const canvas = handCanvasRef.value
+  const ctx = canvas.getContext('2d')
+  canvas.width = videoRef.value.videoWidth
+  canvas.height = videoRef.value.videoHeight
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  
+  if (results.multiHandLandmarks && results.multiHandLandmarks.length >= 1) {
+    handsDetected.value = true
+    const landmarks = results.multiHandLandmarks[0]
     
-    const predictions = await handModel.detect(videoRef.value)
-    const canvas = handCanvasRef.value
-    const ctx = canvas.getContext('2d')
+    const thumbTip = landmarks[4]
+    const indexTip = landmarks[8]
+    const wrist = landmarks[0]
     
-    canvas.width = videoRef.value.videoWidth
-    canvas.height = videoRef.value.videoHeight
+    // 计算拇指食指距离（控制缩放）
+    const pinchDistance = Math.sqrt(
+      Math.pow(thumbTip.x - indexTip.x, 2) +
+      Math.pow(thumbTip.y - indexTip.y, 2)
+    )
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    const smoothedPinch = lastPinchDistance * (1 - smoothingFactor) + pinchDistance * smoothingFactor
+    lastPinchDistance = smoothedPinch
     
-    if (predictions && predictions.length >= 2) {
-      handsDetected.value = true
-      lastHandPositions = predictions.slice(0, 2)
-      
-      const hand1 = predictions[0].bbox
-      const hand2 = predictions[1].bbox
-      
-      const center1 = {
-        x: hand1[0] + hand1[2] / 2,
-        y: hand1[1] + hand1[3] / 2
-      }
-      const center2 = {
-        x: hand2[0] + hand2[2] / 2,
-        y: hand2[1] + hand2[3] / 2
-      }
-      
-      const rawDistance = Math.sqrt(
-        Math.pow(center1.x - center2.x, 2) +
-        Math.pow(center1.y - center2.y, 2)
-      ) / canvas.width
-      
-      smoothedDistance = smoothedDistance * (1 - smoothingFactor) + rawDistance * smoothingFactor
-      gestureDistance.value = smoothedDistance
-      particleScale.value = Math.max(0.3, Math.min(3, smoothedDistance * 5))
-      
-      predictions.slice(0, 2).forEach((prediction, index) => {
-        const [x, y, width, height] = prediction.bbox
-        
-        ctx.strokeStyle = index === 0 ? '#00ff88' : '#ff0088'
-        ctx.lineWidth = 3
-        ctx.strokeRect(x, y, width, height)
-        
-        ctx.fillStyle = index === 0 ? '#00ff88' : '#ff0088'
-        ctx.font = '16px Arial'
-        ctx.fillText(`Hand ${index + 1}`, x, y - 5)
-        
-        ctx.beginPath()
-        ctx.arc(x + width / 2, y + height / 2, 8, 0, 2 * Math.PI)
-        ctx.fillStyle = index === 0 ? '#00ff88' : '#ff0088'
-        ctx.fill()
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)'
-        ctx.lineWidth = 2
-        ctx.stroke()
-      })
+    // 计算拇指食指之间的角度（控制旋转）
+    const pinchAngle = Math.atan2(indexTip.y - thumbTip.y, indexTip.x - thumbTip.x)
+    
+    let angleDelta = pinchAngle - lastPinchAngle
+    if (angleDelta > Math.PI) angleDelta -= 2 * Math.PI
+    if (angleDelta < -Math.PI) angleDelta += 2 * Math.PI
+    
+    // 根据距离控制缩放
+    if (smoothedPinch < 0.05) {
+      currentGesture.value = '🤏 捏合缩小'
+      particleScale.value = Math.max(0.3, particleScale.value - 0.02)
+    } else if (smoothedPinch > 0.15) {
+      currentGesture.value = '🖐️ 张开放大'
+      particleScale.value = Math.min(3, particleScale.value + 0.02)
+    } else {
+      currentGesture.value = '✋ 保持'
+    }
+    
+    // 根据角度控制旋转
+    if (Math.abs(angleDelta) > 0.04) {
+      const targetSpeed = angleDelta * 0.25
+      smoothedRotationSpeed = smoothedRotationSpeed * (1 - rotationSmoothingFactor) + targetSpeed * rotationSmoothingFactor
+      rotationSpeed = smoothedRotationSpeed
+    } else {
+      smoothedRotationSpeed *= 0.95
+      rotationSpeed = smoothedRotationSpeed
+    }
+    
+    lastPinchAngle = pinchAngle
+    
+    // 绘制拇指食指连线
+    ctx.beginPath()
+    ctx.moveTo(thumbTip.x * canvas.width, thumbTip.y * canvas.height)
+    ctx.lineTo(indexTip.x * canvas.width, indexTip.y * canvas.height)
+    ctx.strokeStyle = smoothedPinch < 0.08 ? '#ff3366' : '#00ff88'
+    ctx.lineWidth = 5
+    ctx.stroke()
+    
+    // 绘制关键点
+    ;[thumbTip, indexTip].forEach((landmark, i) => {
+      const x = landmark.x * canvas.width
+      const y = landmark.y * canvas.height
       
       ctx.beginPath()
-      ctx.moveTo(center1.x, center1.y)
-      ctx.lineTo(center2.x, center2.y)
-      ctx.strokeStyle = 'rgba(255, 255, 0, 0.8)'
-      ctx.lineWidth = 3
-      ctx.setLineDash([5, 5])
+      ctx.arc(x, y, 8, 0, 2 * Math.PI)
+      ctx.fillStyle = smoothedPinch < 0.08 ? '#ff3366' : '#00ff88'
+      ctx.fill()
+    })
+    
+    const connections = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]]
+    connections.forEach(([start, end]) => {
+      const startPoint = landmarks[start]
+      const endPoint = landmarks[end]
+      ctx.beginPath()
+      ctx.moveTo(startPoint.x * canvas.width, startPoint.y * canvas.height)
+      ctx.lineTo(endPoint.x * canvas.width, endPoint.y * canvas.height)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)'
+      ctx.lineWidth = 2
       ctx.stroke()
-      ctx.setLineDash([])
+    })
+  } else {
+    handsDetected.value = false
+    currentGesture.value = '等待手势'
+    rotationSpeed = 0.002
+  }
+}
+
+const onDrawResults = (results) => {
+  const canvas = handCanvasRef.value
+  const ctx = canvas.getContext('2d')
+  canvas.width = videoRef.value.videoWidth
+  canvas.height = videoRef.value.videoHeight
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  
+  if (!drawCtx && drawCanvasRef.value) {
+    drawCtx = drawCanvasRef.value.getContext('2d')
+    drawCanvasRef.value.width = window.innerWidth
+    drawCanvasRef.value.height = window.innerHeight
+  }
+  
+  if (results.multiHandLandmarks && results.multiHandLandmarks.length >= 1) {
+    handsDetected.value = true
+    const landmarks = results.multiHandLandmarks[0]
+    const indexTip = landmarks[8]
+    
+    currentGesture.value = '✍️ 绘制中'
+    const x = (1 - indexTip.x) * window.innerWidth
+    const y = indexTip.y * window.innerHeight
+    
+    const now = Date.now()
+    if (drawCtx && now - drawThrottle > DRAW_THROTTLE_MS) {
+      drawThrottle = now
       
-    } else {
-      handsDetected.value = false
+      if (lastDrawPoint) {
+        const dist = Math.sqrt(
+          Math.pow(x - lastDrawPoint.x, 2) +
+          Math.pow(y - lastDrawPoint.y, 2)
+        )
+        
+        if (dist > 3) {
+          drawCtx.beginPath()
+          drawCtx.moveTo(lastDrawPoint.x, lastDrawPoint.y)
+          drawCtx.lineTo(x, y)
+          drawCtx.strokeStyle = modelColors[selectedModel.value]
+          drawCtx.lineWidth = 8
+          drawCtx.lineCap = 'round'
+          drawCtx.lineJoin = 'round'
+          drawCtx.stroke()
+          
+          lastDrawPoint = { x, y }
+        }
+      } else {
+        lastDrawPoint = { x, y }
+      }
     }
-  }, 100)
+    
+    ctx.beginPath()
+    ctx.arc(indexTip.x * canvas.width, indexTip.y * canvas.height, 10, 0, 2 * Math.PI)
+    ctx.fillStyle = modelColors[selectedModel.value]
+    ctx.fill()
+  } else {
+    handsDetected.value = false
+    currentGesture.value = '等待手势'
+    lastDrawPoint = null
+  }
+}
+
+const clearDrawing = () => {
+  drawingPoints = []
+  lastDrawPoint = null
+  if (drawCtx && drawCanvasRef.value) {
+    drawCtx.clearRect(0, 0, drawCanvasRef.value.width, drawCanvasRef.value.height)
+  }
 }
 
 const changeModel = () => {
   createParticles()
-}
-
-const updateColor = () => {
-  if (particles) {
-    particles.material.color.set(particleColor.value)
+  if (controlMode.value === 'draw') {
+    clearDrawing()
   }
 }
 
@@ -344,22 +562,25 @@ const handleWheel = (event) => {
     const delta = event.deltaY * -0.001
     mouseScale = Math.max(0.3, Math.min(3, mouseScale + delta))
     particleScale.value = mouseScale
-    gestureDistance.value = mouseScale / 5
   }
 }
 
 const switchControlMode = () => {
-  if (controlMode.value === 'gesture') {
+  if (controlMode.value !== 'mouse') {
+    if (cameraStream) cameraStream.stop()
+    if (hands) hands.close()
+    if (videoRef.value && videoRef.value.srcObject) {
+      videoRef.value.srcObject.getTracks().forEach(track => track.stop())
+    }
     initHandTracking()
   } else {
-    if (detectionInterval) {
-      clearInterval(detectionInterval)
-      detectionInterval = null
-    }
+    if (cameraStream) cameraStream.stop()
+    if (hands) hands.close()
     if (videoRef.value && videoRef.value.srcObject) {
       videoRef.value.srcObject.getTracks().forEach(track => track.stop())
     }
     handsDetected.value = false
+    currentGesture.value = '等待手势'
   }
 }
 
@@ -375,157 +596,206 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('wheel', handleWheel)
-  if (detectionInterval) clearInterval(detectionInterval)
-  if (videoRef.value && videoRef.value.srcObject) {
-    videoRef.value.srcObject.getTracks().forEach(track => track.stop())
-  }
-  if (handModel) handModel.dispose()
+  if (cameraStream) cameraStream.stop()
+  if (hands) hands.close()
   if (renderer) renderer.dispose()
 })
 </script>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .particle-container {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: radial-gradient(ellipse at center, #1a1a2e 0%, #000000 100%);
+  background:
+    radial-gradient(ellipse at top left, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at center, #1a1a2e 0%, #000000 100%);
 }
 
 canvas {
   display: block;
 }
 
-.control-panel {
+.draw-canvas {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: linear-gradient(135deg, rgba(30, 30, 60, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
-  padding: 0;
-  border-radius: 16px;
-  color: #fff;
-  min-width: 260px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.top-bar {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background: rgba(20, 20, 40, 0.9);
+  padding: 10px 15px;
+  border-radius: 50px;
   backdrop-filter: blur(10px);
-  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 100;
 }
 
-.panel-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 15px 20px;
-  margin: 0;
-}
-
-.panel-header h3 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.control-group {
-  margin: 0;
-  padding: 15px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.control-group label {
-  display: block;
-  margin-bottom: 8px;
+.model-select, .mode-select {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  color: #fff;
+  cursor: pointer;
   font-size: 13px;
   font-weight: 500;
-  color: #a0a0ff;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);
+  outline: none;
 }
 
-.control-group select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s;
-}
-
-.control-group select:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.color-picker-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.control-group input[type="color"] {
-  width: 50px;
-  height: 40px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: transparent;
-}
-
-.color-value {
-  font-family: monospace;
-  font-size: 13px;
-  color: #a0a0ff;
-  flex: 1;
-}
-
-.fullscreen-btn {
-  width: calc(100% - 40px);
-  margin: 15px 20px;
-  padding: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s;
+.model-select:hover, .mode-select:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(118, 75, 162, 0.35) 100%);
+  border-color: rgba(102, 126, 234, 0.5);
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
 }
 
-.fullscreen-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+.model-select:focus, .mode-select:focus {
+  border-color: rgba(102, 126, 234, 0.8);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
-.status-indicator {
-  padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.03);
-  font-size: 13px;
+.model-select option, .mode-select option {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 10px;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #888;
+  justify-content: center;
   transition: all 0.3s;
 }
 
-.status-indicator.active {
-  background: rgba(0, 255, 136, 0.1);
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.1);
+}
+
+.icon-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.help-panel {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 500px;
+  width: 90%;
+  background: rgba(20, 20, 40, 0.95);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 99;
+  color: #fff;
+}
+
+.help-panel h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.help-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.help-section h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #a0a0ff;
+}
+
+.help-section ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.help-section li {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #ccc;
+  position: relative;
+  padding-left: 15px;
+}
+
+.help-section li:before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #667eea;
+}
+
+.help-section strong {
   color: #00ff88;
 }
 
-.status-indicator .dot {
+.camera-view {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 280px;
+  background: rgba(20, 20, 40, 0.9);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.camera-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.status-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #888;
+  background: #666;
   transition: all 0.3s;
 }
 
-.status-indicator.active .dot {
+.status-dot.active {
   background: #00ff88;
   box-shadow: 0 0 10px #00ff88;
   animation: pulse 1.5s infinite;
@@ -536,46 +806,17 @@ canvas {
   50% { opacity: 0.5; }
 }
 
-.camera-view {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 360px;
-  background: linear-gradient(135deg, rgba(30, 30, 60, 0.95) 0%, rgba(20, 20, 40, 0.95) 100%);
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
+.gesture-text {
+  flex: 1;
+  font-size: 12px;
+  color: #fff;
 }
 
-.camera-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.camera-title {
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 11px;
+.scale-text {
+  font-size: 12px;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s;
-}
-
-.status-badge.active {
-  background: rgba(0, 255, 136, 0.3);
   color: #00ff88;
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  font-family: monospace;
 }
 
 .video-wrapper {
@@ -598,45 +839,84 @@ canvas {
   transform: scaleX(-1);
 }
 
-.gesture-info {
-  padding: 16px;
-  background: rgba(0, 0, 0, 0.5);
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
 }
 
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 
-.info-item .label {
-  font-size: 12px;
-  color: #a0a0ff;
-  font-weight: 500;
+@media (max-width: 768px) {
+  .top-bar {
+    top: 10px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  
+  .model-select, .mode-select {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .icon-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .help-panel {
+    top: 60px;
+    padding: 15px;
+  }
+  
+  .help-panel h3 {
+    font-size: 16px;
+  }
+  
+  .help-section h4 {
+    font-size: 13px;
+  }
+  
+  .help-section li {
+    font-size: 12px;
+  }
+  
+  .camera-view {
+    bottom: 10px;
+    right: 10px;
+    width: 200px;
+  }
+  
+  .camera-header {
+    padding: 8px 10px;
+  }
+  
+  .gesture-text, .scale-text {
+    font-size: 11px;
+  }
 }
 
-.info-item .value {
-  font-family: 'Courier New', monospace;
-  font-size: 16px;
-  font-weight: 700;
-  color: #00ff88;
-  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+@media (max-width: 480px) {
+  .top-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .help-panel {
+    max-width: 95%;
+  }
+  
+  .camera-view {
+    width: 160px;
+    bottom: 5px;
+    right: 5px;
+  }
 }
 
-.progress-bar {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: 8px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #00ff88 100%);
-  border-radius: 3px;
-  transition: width 0.2s ease;
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+@media (hover: none) and (pointer: coarse) {
+  .model-select, .mode-select, .icon-btn {
+    min-height: 44px;
+  }
 }
 </style>
