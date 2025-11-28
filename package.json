@@ -11,15 +11,24 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@galacean/effects": "^2.7.3",
+    "@galacean/effects-plugin-rich-text": "^2.7.3",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/hands": "^0.4.1675469240",
     "@pixelium/web-vue": "^0.0.2-fix",
+    "@tensorflow-models/hand-pose-detection": "^2.0.1",
+    "@tensorflow-models/handpose": "^0.1.0",
+    "@tensorflow/tfjs": "^4.22.0",
     "@vue-office/docx": "^1.6.2",
     "@vueuse/core": "^13.9.0",
     "ant-design-vue": "^4.0.0",
     "axios": "^1.4.0",
     "element-plus": "^2.5.3",
+    "handtrackjs": "^0.1.5",
     "html2canvas": "^1.4.1",
     "pinia": "^2.1.4",
     "pinia-plugin-persist": "^1.0.0",
+    "three": "^0.181.2",
     "vant": "^4.6.4",
     "vconsole": "^3.15.1",
     "vue": "^3.3.4",
@@ -28,9 +37,7 @@
     "vue-router": "^4.2.4",
     "vue-video-player": "^6.0.0",
     "vue3-colorpicker": "^2.3.0",
-    "weixin-js-sdk": "^1.6.5",
-    "@galacean/effects": "^2.7.3",
-    "@galacean/effects-plugin-rich-text": "^2.7.3"
+    "weixin-js-sdk": "^1.6.5"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.1",

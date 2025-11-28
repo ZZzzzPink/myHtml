@@ -58,6 +58,11 @@ const router = createRouter({
             path: '/esign',
             name: 'esign',
             component: () => import('../views/esign.vue')
+        },
+        {
+            path: '/particle',
+            name: 'particle',
+            component: () => import('../views/ParticleSystem.vue')
         }
     ],
 })
