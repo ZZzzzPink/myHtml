@@ -16,9 +16,11 @@ export default defineConfig({
         port: 8086,
         host: true,
     },
+    publicPath: "./",
+    outputDir: "dist",
+    assetsDir: "assets",
     base: "./",
     build: {
         outDir: "dist",
-        assetsDir: "assets",
-    },
+    }
 })
