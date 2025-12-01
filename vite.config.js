@@ -17,6 +17,10 @@ export default defineConfig({
         host: true,
     },
     publicPath: "./",
+    outputDir: "dist",
     assetsDir: "assets",
     base: "./",
+    build: {
+        outDir: "dist",
+    }
 })
