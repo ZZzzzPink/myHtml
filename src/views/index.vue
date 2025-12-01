@@ -116,7 +116,7 @@ import ImageCarousel from '@/components/modules/ImageCarousel.vue'
 import LazyImageGallery from '@/components/modules/LazyImageGallery.vue'
 
 // 开发环境启用vConsole
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.MODE === 'development') {
     new Vconsole()
 }
 

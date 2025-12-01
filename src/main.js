@@ -33,7 +33,7 @@ import "vue3-colorpicker/style.css";
 // pinia持久化插件
 import piniaPersist from 'pinia-plugin-persist'
 
-process.env.NODE_ENV !== "production" && updateBuild.start()
+import.meta.env.MODE !== "production" && updateBuild.start()
 
 const pinia = createPinia()
 pinia.use(piniaPersist)
