@@ -1,11 +1,17 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
 import NumberFlapper from './components/NumberFlapper.vue';
-import { getCurrentInstance, onMounted } from 'vue';
+import GlobalPlayer from './components/music/Player/GlobalPlayer.vue';
+import { getCurrentInstance, onMounted, computed } from 'vue';
 import { PiniaTest } from './stores/PiniaTest';
 import { storeToRefs } from 'pinia';
 
+const route = useRoute()
 const { themeColor } = storeToRefs(PiniaTest())
+
+const showGlobalPlayer = computed(() => {
+  return route.path.startsWith('/music')
+})
 
 window.$this = getCurrentInstance().appContext.config.globalProperties
 onMounted(() => {
@@ -15,6 +21,7 @@ onMounted(() => {
 
 <template>
   <RouterView />
+  <GlobalPlayer v-if="showGlobalPlayer" />
 </template>
 
 <style>

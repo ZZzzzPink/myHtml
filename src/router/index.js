@@ -62,6 +62,30 @@ const router = createRouter({
             path: '/particle',
             name: 'particle',
             component: () => import('../views/ParticleSystem.vue')
+        },
+        {
+            path: '/music',
+            name: 'musicHome',
+            component: () => import('../views/music/Home.vue'),
+            meta: { title: '音乐首页' }
+        },
+        {
+            path: '/music/search',
+            name: 'musicSearch',
+            component: () => import('../views/music/Search.vue'),
+            meta: { title: '音乐搜索' }
+        },
+        {
+            path: '/music/player',
+            name: 'musicPlayer',
+            component: () => import('../views/music/Player.vue'),
+            meta: { title: '音乐播放器' }
+        },
+        {
+            path: '/music/ranking',
+            name: 'musicRanking',
+            component: () => import('../views/music/Ranking.vue'),
+            meta: { title: '音乐排行榜' }
         }
     ],
 })

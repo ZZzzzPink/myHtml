@@ -43,7 +43,7 @@ const initPlayer = async () => {
 }
 
 onMounted(() => {
-    initPlayer()
+    // initPlayer()
 })
 </script>
 

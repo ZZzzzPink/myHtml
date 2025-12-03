@@ -29,6 +29,9 @@
                 <el-button @click="$router.push('/particle')" type="danger">
                     3D粒子系统
                 </el-button>
+                <el-button @click="$router.push('/music')" type="danger">
+                    音乐播放器
+                </el-button>
                 <RouterLink to="/progressBar" class="router-link">
                     圆形进度条
                 </RouterLink>
