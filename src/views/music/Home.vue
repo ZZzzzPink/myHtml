@@ -2,7 +2,9 @@
   <div class="music-home">
     <div class="header">
       <div class="title-container">
-        <el-icon class="music-icon" :size="42"><Headset /></el-icon>
+        <el-icon class="music-icon" :size="42">
+          <Headset />
+        </el-icon>
         <div class="title-text">
           <h1>在线音乐播放器</h1>
           <p class="subtitle">
@@ -13,10 +15,10 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 搜索组件 -->
     <SearchBox @search="handleSearch" />
-    
+
     <!-- 快速入口 -->
     <div class="quick-actions">
       <button @click="$router.push('/music/search')" class="action-btn search-btn">
@@ -32,7 +34,7 @@
         <span>排行榜</span>
       </button>
     </div>
-    
+
     <!-- 功能介绍 -->
     <div class="features">
       <div class="feature-card">
@@ -49,31 +51,6 @@
         <div class="feature-icon">📱</div>
         <h3>多端适配</h3>
         <p>支持PC和移动端访问</p>
-      </div>
-    </div>
-    
-    <!-- 最近播放 -->
-    <div v-if="playlistStore.playList.length > 0" class="recent-section">
-      <h2>播放列表</h2>
-      <div class="song-list">
-        <div 
-          v-for="(song, index) in playlistStore.playList" 
-          :key="song.id || index"
-          @click="playSong(song, index)"
-          class="song-item"
-          :class="{ active: playlistStore.currentIndex === index }"
-        >
-          <img 
-            :src="song.pic || '/favicon.ico'" 
-            :alt="song.name" 
-            class="song-cover" 
-          />
-          <div class="song-info">
-            <p class="song-name">{{ song.name }}</p>
-            <p class="song-artist">{{ song.artist }}</p>
-          </div>
-          <span v-if="playlistStore.currentIndex === index" class="playing-icon">▶</span>
-        </div>
       </div>
     </div>
   </div>
@@ -133,14 +110,17 @@ const playSong = (song, index) => {
   right: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
   animation: pulse-bg 3s ease-in-out infinite;
 }
 
 @keyframes pulse-bg {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0);
   }
+
   50% {
     transform: translate(-10px, -10px);
   }
@@ -164,6 +144,7 @@ const playSong = (song, index) => {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -178,7 +159,7 @@ const playSong = (song, index) => {
   font-size: 32px;
   color: white;
   font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
@@ -189,7 +170,7 @@ const playSong = (song, index) => {
 }
 
 .subtitle :deep(.el-tag) {
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   font-size: 12px;
 }
@@ -367,9 +348,12 @@ const playSong = (song, index) => {
 }
 
 @keyframes bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-3px);
   }
@@ -392,7 +376,7 @@ const playSong = (song, index) => {
   .subtitle {
     font-size: 14px;
   }
-  
+
   .quick-actions {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -407,7 +391,7 @@ const playSong = (song, index) => {
   .action-btn .icon {
     font-size: 28px;
   }
-  
+
   .features {
     grid-template-columns: 1fr;
     gap: 16px;

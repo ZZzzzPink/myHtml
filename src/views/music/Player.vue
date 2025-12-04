@@ -139,23 +139,10 @@ const downloadSong = async (song) => {
   }
   
   try {
-    ElMessage.info('正在准备下载...')
-    
-    // 构建下载URL - 直接使用API的URL端点
+    // 直接在新标签页打开下载URL，让浏览器处理
     const downloadUrl = `https://music-dl.sayqz.com/api/?source=${song.source}&id=${song.id}&type=url&br=320k`
-    
-    // 创建隐藏的iframe来触发下载
-    const iframe = document.createElement('iframe')
-    iframe.style.display = 'none'
-    iframe.src = downloadUrl
-    document.body.appendChild(iframe)
-    
-    // 3秒后移除iframe
-    setTimeout(() => {
-      document.body.removeChild(iframe)
-    }, 3000)
-    
-    ElMessage.success('下载已开始')
+    window.open(downloadUrl, '_blank')
+    ElMessage.success('下载已开始，请在新标签页中保存文件')
   } catch (error) {
     console.error('下载失败:', error)
     ElMessage.error('下载失败，请稍后重试')
