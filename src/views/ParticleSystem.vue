@@ -344,32 +344,39 @@ const animate = () => {
 }
 
 const initHandTracking = async () => {
-  hands = new Hands({
-    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${file}`
-  })
-  
-  hands.setOptions({
-    maxNumHands: 1,
-    modelComplexity: 1,
-    minDetectionConfidence: 0.7,
-    minTrackingConfidence: 0.7
-  })
-  
-  hands.onResults(controlMode.value === 'draw' ? onDrawResults : onHandsResults)
-  
-  const stream = await navigator.mediaDevices.getUserMedia({ 
-    video: { width: 640, height: 480 }
-  })
-  videoRef.value.srcObject = stream
-  
-  cameraStream = new Camera(videoRef.value, {
-    onFrame: async () => {
-      await hands.send({ image: videoRef.value })
-    },
-    width: 640,
-    height: 480
-  })
-  cameraStream.start()
+  try {
+    hands = new Hands({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/${file}`
+    })
+    
+    hands.setOptions({
+      maxNumHands: 1,
+      modelComplexity: 1,
+      minDetectionConfidence: 0.7,
+      minTrackingConfidence: 0.7
+    })
+    
+    hands.onResults(controlMode.value === 'draw' ? onDrawResults : onHandsResults)
+    
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: 640, height: 480 }
+    })
+    videoRef.value.srcObject = stream
+    
+    cameraStream = new Camera(videoRef.value, {
+      onFrame: async () => {
+        if (hands) {
+          await hands.send({ image: videoRef.value })
+        }
+      },
+      width: 640,
+      height: 480
+    })
+    cameraStream.start()
+  } catch (error) {
+    console.error('初始化手势追踪失败:', error)
+    currentGesture.value = '初始化失败'
+  }
 }
 
 const onHandsResults = (results) => {
@@ -565,22 +572,45 @@ const handleWheel = (event) => {
   }
 }
 
-const switchControlMode = () => {
+const cleanupHandTracking = async () => {
+  // 停止摄像头流
+  if (cameraStream) {
+    cameraStream.stop()
+    cameraStream = null
+  }
+  
+  // 关闭 hands 实例
+  if (hands) {
+    try {
+      await hands.close()
+    } catch (error) {
+      console.warn('关闭 hands 实例时出错:', error)
+    }
+    hands = null
+  }
+  
+  // 停止视频轨道
+  if (videoRef.value && videoRef.value.srcObject) {
+    videoRef.value.srcObject.getTracks().forEach(track => track.stop())
+    videoRef.value.srcObject = null
+  }
+  
+  // 重置状态
+  handsDetected.value = false
+  currentGesture.value = '等待手势'
+  lastDrawPoint = null
+}
+
+const switchControlMode = async () => {
+  // 先清理旧的实例
+  await cleanupHandTracking()
+  
+  // 等待一小段时间确保资源完全释放
+  await new Promise(resolve => setTimeout(resolve, 300))
+  
+  // 如果不是鼠标模式，重新初始化手势追踪
   if (controlMode.value !== 'mouse') {
-    if (cameraStream) cameraStream.stop()
-    if (hands) hands.close()
-    if (videoRef.value && videoRef.value.srcObject) {
-      videoRef.value.srcObject.getTracks().forEach(track => track.stop())
-    }
-    initHandTracking()
-  } else {
-    if (cameraStream) cameraStream.stop()
-    if (hands) hands.close()
-    if (videoRef.value && videoRef.value.srcObject) {
-      videoRef.value.srcObject.getTracks().forEach(track => track.stop())
-    }
-    handsDetected.value = false
-    currentGesture.value = '等待手势'
+    await initHandTracking()
   }
 }
 
@@ -593,11 +623,10 @@ onMounted(() => {
   window.addEventListener('wheel', handleWheel, { passive: false })
 })
 
-onUnmounted(() => {
+onUnmounted(async () => {
   window.removeEventListener('resize', handleResize)
   window.removeEventListener('wheel', handleWheel)
-  if (cameraStream) cameraStream.stop()
-  if (hands) hands.close()
+  await cleanupHandTracking()
   if (renderer) renderer.dispose()
 })
 </script>
