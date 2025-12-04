@@ -3,65 +3,52 @@
     <div class="header">
       <el-button @click="$router.back()" circle :icon="ArrowLeft" class="back-btn" />
       <div class="header-title">
-        <el-icon :size="24" color="#409eff"><Headset /></el-icon>
+        <el-icon :size="24" color="#409eff">
+          <Headset />
+        </el-icon>
         <h2>正在播放</h2>
       </div>
       <div class="header-spacer"></div>
     </div>
-    
+
     <div v-if="playerStore.currentSong" class="player-container">
-      <MusicPlayer @currentTimeUpdate="handleCurrentTimeUpdate"/>
-      
+      <MusicPlayer @currentTimeUpdate="handleCurrentTimeUpdate" />
+
       <div class="tabs">
-        <button 
-          @click="activeTab = 'playlist'" 
-          class="tab-btn"
-          :class="{ active: activeTab === 'playlist' }"
-        >
+        <button @click="activeTab = 'playlist'" class="tab-btn" :class="{ active: activeTab === 'playlist' }">
           播放列表 ({{ playlistStore.playList.length }})
         </button>
-        <button 
-          @click="activeTab = 'lyrics'" 
-          class="tab-btn"
-          :class="{ active: activeTab === 'lyrics' }"
-        >
+        <button @click="activeTab = 'lyrics'" class="tab-btn" :class="{ active: activeTab === 'lyrics' }">
           歌词
         </button>
       </div>
-      
+
       <div v-if="activeTab === 'playlist'" class="playlist-panel">
         <div v-if="playlistStore.playList.length === 0" class="empty">
           <p>播放列表为空</p>
         </div>
         <div v-else class="playlist">
-          <div
-            v-for="(song, index) in playlistStore.playList"
-            :key="song.id || index"
-            @click="playSongAtIndex(index)"
-            class="playlist-item"
-            :class="{ active: playlistStore.currentIndex === index }"
-          >
+          <div v-for="(song, index) in playlistStore.playList" :key="song.id || index" @click="playSongAtIndex(index)"
+            class="playlist-item" :class="{ active: playlistStore.currentIndex === index }">
             <span class="index">{{ index + 1 }}</span>
             <img :src="song.pic || '/favicon.ico'" :alt="song.name" class="song-thumb" />
             <div class="song-detail">
               <p class="name">{{ song.name }}</p>
               <p class="artist">{{ song.artist }}</p>
             </div>
-            <button @click.stop="downloadSong(song)" class="download-song-btn" title="下载歌曲"><el-icon><Download /></el-icon></button>
+            <button @click.stop="downloadSong(song)" class="download-song-btn" title="下载歌曲"><el-icon>
+                <Download />
+              </el-icon></button>
             <button @click.stop="removeSong(index)" class="remove-btn">×</button>
           </div>
         </div>
       </div>
-      
+
       <div v-if="activeTab === 'lyrics'" class="lyrics-panel" ref="lyricsContainer">
         <div v-if="parsedLyrics.length > 0" class="lyrics-content">
-          <p 
-            v-for="(line, index) in parsedLyrics" 
-            :key="index" 
-            :ref="el => { if(index === currentLyricIndex) currentLyricEl = el }"
-            class="lyric-line"
-            :class="{ active: index === currentLyricIndex }"
-          >
+          <p v-for="(line, index) in parsedLyrics" :key="index"
+            :ref="el => { if (index === currentLyricIndex) currentLyricEl = el }" class="lyric-line"
+            :class="{ active: index === currentLyricIndex }">
             {{ line.text }}
           </p>
         </div>
@@ -70,7 +57,7 @@
         </div>
       </div>
     </div>
-    
+
     <div v-else class="empty-player">
       <p>🎵</p>
       <p>暂无播放内容</p>
@@ -137,7 +124,7 @@ const downloadSong = async (song) => {
     ElMessage.warning('歌曲信息不完整')
     return
   }
-  
+
   try {
     // 直接在新标签页打开下载URL，让浏览器处理
     const downloadUrl = `https://music-dl.sayqz.com/api/?source=${song.source}&id=${song.id}&type=url&br=320k`
@@ -151,11 +138,11 @@ const downloadSong = async (song) => {
 
 const loadLyrics = async () => {
   if (!playerStore.currentSong) return
-  
+
   try {
     const response = await playerApi.getLyrics(
-        playerStore.currentSong.source,
-        playerStore.currentSong.id
+      playerStore.currentSong.source,
+      playerStore.currentSong.id
     )
     lyrics.value = response || ''
     parsedLyrics.value = parseLyrics(response)
@@ -168,7 +155,7 @@ const loadLyrics = async () => {
 
 const handleCurrentTimeUpdate = (currentTime) => {
   if (parsedLyrics.value.length === 0) return
-  
+
   const newIndex = getCurrentLyricIndex(parsedLyrics.value, currentTime)
   if (newIndex !== currentLyricIndex.value) {
     currentLyricIndex.value = newIndex
@@ -181,13 +168,13 @@ const scrollToCurrentLyric = () => {
     if (currentLyricEl.value && lyricsContainer.value) {
       const container = lyricsContainer.value
       const element = currentLyricEl.value
-      
+
       const containerHeight = container.clientHeight
       const elementTop = element.offsetTop
       const elementHeight = element.clientHeight
-      
+
       const scrollTo = elementTop - (containerHeight / 2) + (elementHeight / 2)
-      
+
       container.scrollTo({
         top: scrollTo,
         behavior: 'smooth'
@@ -226,7 +213,7 @@ watch(() => playerStore.currentSong, (newSong) => {
   padding: 16px 20px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .back-btn {
@@ -287,7 +274,8 @@ watch(() => playerStore.currentSong, (newSong) => {
   color: white;
 }
 
-.playlist-panel, .lyrics-panel {
+.playlist-panel,
+.lyrics-panel {
   background: white;
   border-radius: 8px;
   padding: 20px;
@@ -299,12 +287,15 @@ watch(() => playerStore.currentSong, (newSong) => {
 .lyrics-panel {
   padding: 0;
   position: relative;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
 .lyrics-panel::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 .playlist {
@@ -526,7 +517,7 @@ watch(() => playerStore.currentSong, (newSong) => {
     padding: 6px 12px;
     font-size: 13px;
   }
-  
+
   .tabs {
     padding: 8px;
     gap: 8px;
@@ -536,8 +527,9 @@ watch(() => playerStore.currentSong, (newSong) => {
     padding: 10px;
     font-size: 13px;
   }
-  
-  .playlist-panel, .lyrics-panel {
+
+  .playlist-panel,
+  .lyrics-panel {
     padding: 16px;
   }
 
@@ -620,7 +612,8 @@ watch(() => playerStore.currentSong, (newSong) => {
     font-size: 12px;
   }
 
-  .playlist-panel, .lyrics-panel {
+  .playlist-panel,
+  .lyrics-panel {
     padding: 12px;
   }
 
@@ -679,8 +672,7 @@ watch(() => playerStore.currentSong, (newSong) => {
 
   .mode-btn,
   .download-btn {
-    padding: 8px 16px;
-    font-size: 12px;
+    padding: 8px 16px;   font-size: 12px;
   }
 }
 </style>
