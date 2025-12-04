@@ -27,12 +27,3 @@ npm run dev
 ```sh
 npm run build
 ```
-<<<<<<< HEAD
-=======
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
->>>>>>> 0823cf00a7d60d5f725518e35ca13ed6b7b70802
